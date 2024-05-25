@@ -1,18 +1,40 @@
-import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/widgets/navbar.dart';
 import 'package:sortcoff/views/home/views/services_button.dart';
 import 'package:weather/weather.dart';
 import 'package:unicons/unicons.dart';
+import '../../../bloc/homepage/home_bloc.dart';
+import '../../../bloc/homepage/home_state.dart';
+import '../../../bloc/homepage/home_event.dart';
+import '../../../models/home_data.dart';
+import '../../../services/home_services.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final String userId = user != null ? user.uid : '';
+
+    return BlocProvider(
+      create: (context) => HomeBloc(HomeServices())..add(FetchHomeData(userId)),
+      child: const HomePageContent(),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageContent extends StatefulWidget {
+  const HomePageContent({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _HomePageContentState createState() => _HomePageContentState();
+}
+
+class _HomePageContentState extends State<HomePageContent> {
   WeatherFactory weatherFactory =
       WeatherFactory("87ceae4944e87632bcc672b5130b4248");
 
@@ -32,6 +54,7 @@ class _HomePageState extends State<HomePage> {
         weatherData = weather;
       });
     } catch (e) {
+      // ignore: avoid_print
       print('Error: $e');
     }
   }
@@ -94,6 +117,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -189,77 +213,128 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Container(
-                                      width: 367,
-                                      height: 24,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              245, 218, 183, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: const Text(
-                                        'Hasil Panen',
-                                        style: TextStyle(
-                                          color: Color.fromRGBO(92, 68, 56, 1),
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 155,
-                                          height: 65,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                          ),
-                                          child: const Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Panen ke 3',
-                                                style: TextStyle(
-                                                  color: Color.fromRGBO(
-                                                      101, 90, 85, 1),
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold,
+                                    BlocBuilder<HomeBloc, HomeState>(
+                                      builder: (context, state) {
+                                        if (state is HomeLoading) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (state is HomeLoaded) {
+                                          final List<HomeData> homeDataList =
+                                              state.homeDataList;
+                                          if (homeDataList.isNotEmpty) {
+                                            final homeData = homeDataList.first;
+                                            return Column(
+                                              children: [
+                                                Container(
+                                                  width: 367,
+                                                  height: 24,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromRGBO(
+                                                        245, 218, 183, 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: const Text(
+                                                    'Hasil Panen',
+                                                    style: TextStyle(
+                                                      color: Color.fromRGBO(
+                                                          92, 68, 56, 1),
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                '2333 kg',
-                                                style: TextStyle(
-                                                  color: Color.fromRGBO(
-                                                      101, 90, 85, 1),
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w500,
+                                                const SizedBox(
+                                                  height: 20,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        const Expanded(
-                                          child: Text(
-                                            'ini deskripsi panjang blawlwlkwlkdlawdwamdoawmdowamdowadawkdlakwkda',
-                                            style: TextStyle(
-                                              color:
-                                                  Color.fromRGBO(94, 68, 55, 1),
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 155,
+                                                      height: 65,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 255, 255, 255),
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            homeData.judul,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      101,
+                                                                      90,
+                                                                      85,
+                                                                      1),
+                                                              fontSize: 15.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '${homeData.banyak} kg',
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      101,
+                                                                      90,
+                                                                      85,
+                                                                      1),
+                                                              fontSize: 15.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: Text(
+                                                        homeData.catatan,
+                                                        style: const TextStyle(
+                                                          color: Color.fromRGBO(
+                                                              94, 68, 55, 1),
+                                                          fontSize: 12.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return const SizedBox();
+                                          }
+                                        } else if (state is HomeError) {
+                                          return Center(
+                                            child: Text(state.error),
+                                          );
+                                        } else {
+                                          return const SizedBox();
+                                        }
+                                      },
                                     ),
                                   ],
                                 ),
