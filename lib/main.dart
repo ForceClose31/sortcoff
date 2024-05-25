@@ -2,10 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sortcoff/global/typography/typography.dart';
 import 'package:sortcoff/lc.dart';
-// import 'package:sortcoff/pages/panen/views/panen.dart';
-// import 'package:sortcoff/pages/home/views/homepage.dart';
-import 'package:sortcoff/pages/splash/views/splash.dart';
-// import 'package:sortcoff/pages/splash/views/splash.dart';
+import 'package:sortcoff/views/splash/views/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,12 +22,11 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Task app',
+      title: 'ShortCoff',
       home: MyWelcome(),
     );
   }

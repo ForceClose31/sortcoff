@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 class AuthRepo {
   final _auth = FirebaseAuth.instance;
   final String esp32Url =
-      'http://<ESP32_IP_ADDRESS>/token'; // Replace with your ESP32 IP address
-
+      'http://<ESP32_IP_ADDRESS>/token';
   Future<User?> createUserWithUsernamePassword(
       String email, String password) async {
     try {
@@ -18,8 +17,10 @@ class AuthRepo {
       return creds.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
+        // ignore: avoid_print
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
+        // ignore: avoid_print
         print('The account already exists for that email.');
       }
       return null;
