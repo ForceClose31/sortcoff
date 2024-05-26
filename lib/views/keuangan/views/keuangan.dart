@@ -1,98 +1,130 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sortcoff/models/finance_data.dart';
+import 'package:sortcoff/views/keuangan/views/detail_keuangan.dart';
+import '../../../bloc/finance/finance_bloc.dart';
+import '../../../bloc/finance/finance_event.dart';
+import '../../../bloc/finance/finance_state.dart';
+import '../../../services/finance_services.dart';
+import 'add_keuangan.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FinanceRecordingScreen extends StatelessWidget {
+  const FinanceRecordingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
-        useMaterial3: true,
-      ),
-      home: const FinanceRecordingScreen(),
+    final user = FirebaseAuth.instance.currentUser;
+    final String userId = user != null ? user.uid : '';
+
+    return BlocProvider(
+      create: (context) => FinanceBloc(financeService: FinanceService())
+        ..add(LoadFinanceData(userId)),
+      child: FinanceRecordingView(userId: userId),
     );
   }
 }
 
-class FinanceRecordingScreen extends StatefulWidget {
-  const FinanceRecordingScreen({super.key});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _FinanceRecordingScreenState createState() => _FinanceRecordingScreenState();
-}
-
-class _FinanceRecordingScreenState extends State<FinanceRecordingScreen> {
-  String selectedCategory = 'Pengeluaran';
-
-  void _onCategorySelected(String category) {
-    setState(() {
-      selectedCategory = category;
-    });
-  }
+class FinanceRecordingView extends StatelessWidget {
+  final String userId;
+  const FinanceRecordingView({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: const Text('Pencatatan Keuangan'),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CategoryButton(
-                  label: 'Pemasukan',
-                  selected: selectedCategory == 'Pemasukan',
-                  onTap: () => _onCategorySelected('Pemasukan'),
-                ),
-                CategoryButton(
-                  label: 'Pengeluaran',
-                  selected: selectedCategory == 'Pengeluaran',
-                  onTap: () => _onCategorySelected('Pengeluaran'),
-                ),
-                CategoryButton(
-                  label: 'All',
-                  selected: selectedCategory == 'All',
-                  onTap: () => _onCategorySelected('All'),
-                ),
-              ],
+            child: BlocBuilder<FinanceBloc, FinanceState>(
+              builder: (context, state) {
+                if (state is FinanceLoaded) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CategoryButton(
+                        label: 'Pemasukan',
+                        selected: state.selectedCategory == 'Pemasukan',
+                        onTap: () => context
+                            .read<FinanceBloc>()
+                            .add(const UpdateCategory('Pemasukan')),
+                      ),
+                      CategoryButton(
+                        label: 'Pengeluaran',
+                        selected: state.selectedCategory == 'Pengeluaran',
+                        onTap: () => context
+                            .read<FinanceBloc>()
+                            .add(const UpdateCategory('Pengeluaran')),
+                      ),
+                      CategoryButton(
+                        label: 'All',
+                        selected: state.selectedCategory == 'All',
+                        onTap: () => context
+                            .read<FinanceBloc>()
+                            .add(const UpdateCategory('All')),
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
           Expanded(
-            child: ListView(
-              children: const [
-                FinanceItem(
-                  title: 'Beli Pupuk',
-                  subtitle: 'Pupuk ABC',
-                  date: '28 Jul 2023',
-                  type: 'Pengeluaran',
-                ),
-                FinanceItem(
-                  title: 'Bayar Pekerja',
-                  subtitle: 'Sebanyak 10',
-                  date: '1 Des 2024',
-                  type: 'Pengeluaran',
-                ),
-              ],
+            child: BlocBuilder<FinanceBloc, FinanceState>(
+              builder: (context, state) {
+                if (state is FinanceLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is FinanceLoaded) {
+                  final filteredData = state.filteredData;
+                  final filteredByCategory = filteredData.where((data) {
+                    if (state.selectedCategory == 'All') {
+                      return true;
+                    } else {
+                      return data.jenisTransaksi == state.selectedCategory;
+                    }
+                  }).toList();
+                  return ListView.builder(
+                    itemCount: filteredByCategory.length,
+                    itemBuilder: (context, index) {
+                      final financeData = filteredByCategory[index];
+                      return FinanceItem(
+                        financeData: financeData,
+                      );
+                    },
+                  );
+                } else if (state is FinanceError) {
+                  return Center(child: Text(state.message));
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddFinance()),
+          );
+          if (result != null && result is FinanceData) {
+            // ignore: use_build_context_synchronously
+            context.read<FinanceBloc>().add(AddFinanceData(userId, result));
+          }
+        },
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
@@ -102,11 +134,11 @@ class CategoryButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const CategoryButton({super.key, 
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+  const CategoryButton(
+      {super.key,
+      required this.label,
+      required this.selected,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -122,38 +154,42 @@ class CategoryButton extends StatelessWidget {
 }
 
 class FinanceItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String date;
-  final String type;
+  final FinanceData financeData;
 
-  const FinanceItem({super.key, 
-    required this.title,
-    required this.subtitle,
-    required this.date,
-    required this.type,
-  });
+  const FinanceItem({
+    Key? key,
+    required this.financeData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: ListTile(
-        leading: const CircleAvatar(
-          backgroundImage:
-              AssetImage('assets/coffee.jpg'), // Replace with your asset image
-        ),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              type,
-              style: const TextStyle(color: Colors.red),
-            ),
-            Text(date),
-          ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailFinance(financeData: financeData),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: ListTile(
+          leading: const CircleAvatar(
+            backgroundImage: AssetImage('assets/coffee.jpg'),
+          ),
+          title: Text(financeData.judul),
+          subtitle: Text(financeData.catatan),
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                financeData.jenisTransaksi,
+                style: const TextStyle(color: Colors.red),
+              ),
+              Text(financeData.tanggal),
+            ],
+          ),
         ),
       ),
     );
