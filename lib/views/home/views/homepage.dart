@@ -494,6 +494,8 @@ class _HomePageContentState extends State<HomePageContent> {
           onTap: (index) {
             if (index == 1) {
               context.read<NavigationBloc>().add(NavigateToProfilePage());
+            } else if (index == 2) {
+              context.read<NavigationBloc>().add(NavigateToPanenPage());
             }
           },
         ),

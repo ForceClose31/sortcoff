@@ -8,6 +8,7 @@ import 'package:sortcoff/lc.dart';
 import 'package:sortcoff/views/splash/views/splash.dart';
 
 import 'views/home/views/homepage.dart';
+import 'views/panen/views/panen.dart';
 import 'views/profile/views/profile.dart';
 
 Future<void> main() async {
@@ -52,6 +53,8 @@ class MainPage extends StatelessWidget {
           return const HomePage();
         } else if (state is ProfilePageState) {
           return const MyProfile();
+        } else if (state is PanenPageState) {
+          return const PanenKopi();
         }
         return const MyWelcome();
       },

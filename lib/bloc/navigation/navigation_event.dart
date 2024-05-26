@@ -10,3 +10,5 @@ abstract class NavigationEvent extends Equatable {
 class NavigateToHomePage extends NavigationEvent {}
 
 class NavigateToProfilePage extends NavigationEvent {}
+
+class NavigateToPanenPage extends NavigationEvent {}

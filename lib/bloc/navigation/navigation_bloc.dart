@@ -10,6 +10,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       yield HomePageState();
     } else if (event is NavigateToProfilePage) {
       yield ProfilePageState();
+    } else if (event is NavigateToPanenPage) {
+      yield PanenPageState();
     }
   }
 }

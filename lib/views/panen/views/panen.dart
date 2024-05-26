@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/views/panen/views/detail_panen.dart';
 import 'package:sortcoff/views/panen/views/edit_panen.dart';
+import '../../../bloc/navigation/navigation_bloc.dart';
+import '../../../bloc/navigation/navigation_event.dart';
+import '../../../global/widgets/navbar.dart';
 import 'add_panen.dart';
 import '../../../bloc/panen/panen_bloc.dart';
 import '../../../bloc/panen/panen_event.dart';
@@ -99,20 +102,23 @@ class PanenKopi extends StatelessWidget {
                                 ],
                               ),
                               trailing: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditPanen(panenData: state.panenList[index]),
-                                  ),
-                                ).then((editedData) {
-                                  if (editedData != null && editedData is PanenData) {
-                                    context.read<PanenBloc>().add(UpdatePanenData(userId, editedData));
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.edit),
-                            ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditPanen(
+                                          panenData: state.panenList[index]),
+                                    ),
+                                  ).then((editedData) {
+                                    if (editedData != null &&
+                                        editedData is PanenData) {
+                                      context.read<PanenBloc>().add(
+                                          UpdatePanenData(userId, editedData));
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Icons.edit),
+                              ),
                             ),
                           ),
                         );
@@ -142,6 +148,16 @@ class PanenKopi extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: 2,
+          onTap: (index) {
+            if (index == 0) {
+              context.read<NavigationBloc>().add(NavigateToHomePage());
+            } else if (index == 1) {
+              context.read<NavigationBloc>().add(NavigateToProfilePage());
+            }
+          },
+        ),
       ),
     );
   }

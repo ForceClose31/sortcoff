@@ -10,3 +10,5 @@ abstract class NavigationState extends Equatable {
 class HomePageState extends NavigationState {}
 
 class ProfilePageState extends NavigationState {}
+
+class PanenPageState extends NavigationState {}
