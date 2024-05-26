@@ -6,6 +6,7 @@ import 'package:sortcoff/views/keuangan/views/detail_keuangan.dart';
 import '../../../bloc/finance/finance_bloc.dart';
 import '../../../bloc/finance/finance_event.dart';
 import '../../../bloc/finance/finance_state.dart';
+import '../../../global/widgets/navbar.dart';
 import '../../../services/finance_services.dart';
 import 'add_keuangan.dart';
 
@@ -32,100 +33,101 @@ class FinanceRecordingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+          title: const Text('Pencatatan Keuangan'),
         ),
-        title: const Text('Pencatatan Keuangan'),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: BlocBuilder<FinanceBloc, FinanceState>(
-              builder: (context, state) {
-                if (state is FinanceLoaded) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      CategoryButton(
-                        label: 'Pemasukan',
-                        selected: state.selectedCategory == 'Pemasukan',
-                        onTap: () => context
-                            .read<FinanceBloc>()
-                            .add(const UpdateCategory('Pemasukan')),
-                      ),
-                      CategoryButton(
-                        label: 'Pengeluaran',
-                        selected: state.selectedCategory == 'Pengeluaran',
-                        onTap: () => context
-                            .read<FinanceBloc>()
-                            .add(const UpdateCategory('Pengeluaran')),
-                      ),
-                      CategoryButton(
-                        label: 'All',
-                        selected: state.selectedCategory == 'All',
-                        onTap: () => context
-                            .read<FinanceBloc>()
-                            .add(const UpdateCategory('All')),
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox.shrink();
-              },
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: BlocBuilder<FinanceBloc, FinanceState>(
+                builder: (context, state) {
+                  if (state is FinanceLoaded) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CategoryButton(
+                          label: 'Pemasukan',
+                          selected: state.selectedCategory == 'Pemasukan',
+                          onTap: () => context
+                              .read<FinanceBloc>()
+                              .add(const UpdateCategory('Pemasukan')),
+                        ),
+                        CategoryButton(
+                          label: 'Pengeluaran',
+                          selected: state.selectedCategory == 'Pengeluaran',
+                          onTap: () => context
+                              .read<FinanceBloc>()
+                              .add(const UpdateCategory('Pengeluaran')),
+                        ),
+                        CategoryButton(
+                          label: 'All',
+                          selected: state.selectedCategory == 'All',
+                          onTap: () => context
+                              .read<FinanceBloc>()
+                              .add(const UpdateCategory('All')),
+                        ),
+                      ],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<FinanceBloc, FinanceState>(
-              builder: (context, state) {
-                if (state is FinanceLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is FinanceLoaded) {
-                  final filteredData = state.filteredData;
-                  final filteredByCategory = filteredData.where((data) {
-                    if (state.selectedCategory == 'All') {
-                      return true;
-                    } else {
-                      return data.jenisTransaksi == state.selectedCategory;
-                    }
-                  }).toList();
-                  return ListView.builder(
-                    itemCount: filteredByCategory.length,
-                    itemBuilder: (context, index) {
-                      final financeData = filteredByCategory[index];
-                      return FinanceItem(
-                        financeData: financeData,
-                      );
-                    },
-                  );
-                } else if (state is FinanceError) {
-                  return Center(child: Text(state.message));
-                }
-                return const SizedBox.shrink();
-              },
+            Expanded(
+              child: BlocBuilder<FinanceBloc, FinanceState>(
+                builder: (context, state) {
+                  if (state is FinanceLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is FinanceLoaded) {
+                    final filteredData = state.filteredData;
+                    final filteredByCategory = filteredData.where((data) {
+                      if (state.selectedCategory == 'All') {
+                        return true;
+                      } else {
+                        return data.jenisTransaksi == state.selectedCategory;
+                      }
+                    }).toList();
+                    return ListView.builder(
+                      itemCount: filteredByCategory.length,
+                      itemBuilder: (context, index) {
+                        final financeData = filteredByCategory[index];
+                        return FinanceItem(
+                          financeData: financeData,
+                        );
+                      },
+                    );
+                  } else if (state is FinanceError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddFinance()),
-          );
-          if (result != null && result is FinanceData) {
-            // ignore: use_build_context_synchronously
-            context.read<FinanceBloc>().add(AddFinanceData(userId, result));
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddFinance()),
+            );
+            if (result != null && result is FinanceData) {
+              // ignore: use_build_context_synchronously
+              context.read<FinanceBloc>().add(AddFinanceData(userId, result));
+            }
+          },
+          child: const Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        bottomNavigationBar: const Navigasi()
+      );
   }
 }
 

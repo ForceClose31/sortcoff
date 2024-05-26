@@ -8,8 +8,6 @@ import 'package:unicons/unicons.dart';
 import '../../../bloc/homepage/home_bloc.dart';
 import '../../../bloc/homepage/home_state.dart';
 import '../../../bloc/homepage/home_event.dart';
-import '../../../bloc/navigation/navigation_bloc.dart';
-import '../../../bloc/navigation/navigation_event.dart';
 import '../../../models/home_data.dart';
 import '../../../services/home_services.dart';
 
@@ -21,16 +19,8 @@ class HomePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final String userId = user != null ? user.uid : '';
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              HomeBloc(HomeServices())..add(FetchHomeData(userId)),
-        ),
-        BlocProvider(
-          create: (context) => NavigationBloc(),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => HomeBloc(HomeServices())..add(FetchHomeData(userId)),
       child: const HomePageContent(),
     );
   }
@@ -489,16 +479,7 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ],
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 1) {
-              context.read<NavigationBloc>().add(NavigateToProfilePage());
-            } else if (index == 2) {
-              context.read<NavigationBloc>().add(NavigateToPanenPage());
-            }
-          },
-        ),
+        bottomNavigationBar: const Navigasi()
       ),
     );
   }
