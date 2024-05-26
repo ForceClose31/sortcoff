@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class MyMachineAct extends StatefulWidget {
   const MyMachineAct({super.key});
@@ -8,6 +11,12 @@ class MyMachineAct extends StatefulWidget {
 }
 
 class _MyMachineActState extends State<MyMachineAct> {
+  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
+  void _sendDataToFirebase(int value){
+    _databaseReference
+      .child('test')
+      .set({'on' : value});
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -67,7 +76,7 @@ class _MyMachineActState extends State<MyMachineAct> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Tindakan yang akan dilakukan saat tombol ditekan
+                            _sendDataToFirebase(1);
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
