@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sortcoff/views/keuangan/views/keuangan.dart';
 import 'package:sortcoff/views/panen/views/panen.dart';
 import 'package:sortcoff/views/sortir/views/machineact.dart';
 
 class ServiceButtons extends StatelessWidget {
-  final VoidCallback onTeleponPressed;
-  final VoidCallback onPesanPressed;
-  final VoidCallback onEmailPressed;
+  final VoidCallback onPanenPressed;
+  final VoidCallback onSortirPressed;
+  final VoidCallback onKeuanganPressed;
 
   const ServiceButtons({
     super.key,
-    required this.onTeleponPressed,
-    required this.onPesanPressed,
-    required this.onEmailPressed,
+    required this.onPanenPressed,
+    required this.onSortirPressed,
+    required this.onKeuanganPressed,
   });
 
   @override
@@ -44,7 +45,12 @@ class ServiceButtons extends StatelessWidget {
         _buildServiceButton(
           icon: 'assets/images/icon/keuangan.png',
           label: 'Keuangan',
-          onPressed: onEmailPressed,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FinanceRecordingScreen()),
+            );
+          },
         ),
       ],
     );

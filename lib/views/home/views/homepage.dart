@@ -415,14 +415,14 @@ class _HomePageContentState extends State<HomePageContent> {
                                   ),
                                   const SizedBox(height: 8),
                                   ServiceButtons(
-                                    onTeleponPressed: () {
-                                      Navigator.pushNamed(context, '/telepon');
+                                    onPanenPressed: () {
+                                      Navigator.pushNamed(context, '/panen');
                                     },
-                                    onPesanPressed: () {
-                                      Navigator.pushNamed(context, '/pesan');
+                                    onSortirPressed: () {
+                                      Navigator.pushNamed(context, '/sortir');
                                     },
-                                    onEmailPressed: () {
-                                      Navigator.pushNamed(context, '/email');
+                                    onKeuanganPressed: () {
+                                      Navigator.pushNamed(context, '/keuangan');
                                     },
                                   ),
                                   const SizedBox(height: 20),
@@ -479,14 +479,7 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ],
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-        ),
+        bottomNavigationBar: const Navigasi()
       ),
     );
   }

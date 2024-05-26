@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:sortcoff/pages/home/views/home.dart';
 import 'package:sortcoff/views/signin/views/signin.dart';
 import 'package:sortcoff/views/signup/views/signup.dart';
 

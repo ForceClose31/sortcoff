@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
-  final int currentIndex;
-  final void Function(int) onTap;
-
-  const CustomBottomNavigationBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+class Navigasi extends StatelessWidget {
+  const Navigasi({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: 65,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -25,26 +18,40 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTap,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
+    
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildNavItem(context, Icons.home, '/Beranda', 'Beranda'),
+            buildNavItem(context, Icons.account_balance_wallet, '/Keuangan', 'Keuangan'),
+            buildNavItem(context, Icons.person, '/Profil', 'Profil'),
+          ],
+        ),
+      
+    );
+  }
+
+  Widget buildNavItem(BuildContext context, IconData iconData, String route, String label) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, route);
+            },
+            icon: Icon(
+              iconData,
+              color: Colors.grey, // Unselected color
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet),
-            label: 'Keuangan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.grey, // Unselected color
+            ),
           ),
         ],
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sortcoff/views/panen/views/detail_panen.dart';
+import 'package:sortcoff/views/panen/views/edit_panen.dart';
 import 'add_panen.dart';
-import 'edit_panen.dart';
 import '../../../bloc/panen/panen_bloc.dart';
 import '../../../bloc/panen/panen_event.dart';
 import '../../../bloc/panen/panen_state.dart';
@@ -18,7 +19,8 @@ class PanenKopi extends StatelessWidget {
     final String userId = user != null ? user.uid : '';
 
     return BlocProvider(
-      create: (context) => PanenBloc(panenService: PanenService())..add(LoadPanenData(userId)),
+      create: (context) =>
+          PanenBloc(panenService: PanenService())..add(LoadPanenData(userId)),
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,36 +54,51 @@ class PanenKopi extends StatelessWidget {
                     return ListView.builder(
                       itemCount: state.panenList.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: ListTile(
-                            title: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'assets/images/content/img1.png',
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPanen(
+                                  panenData: state.panenList[index],
                                 ),
-                                const SizedBox(width: 16),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.panenList[index].judul,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: ListTile(
+                              title: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/content/img1.png',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        state.panenList[index].judul,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text('Kopi: ${state.panenList[index].jenisKopi}'),
-                                    Text('Tanggal: ${state.panenList[index].tanggalPanen}'),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            trailing: IconButton(
+                                      const SizedBox(height: 8),
+                                      Text(
+                                          'Kopi: ${state.panenList[index].jenisKopi}'),
+                                      Text(
+                                          'Tanggal: ${state.panenList[index].tanggalPanen}'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              trailing: IconButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -96,12 +113,14 @@ class PanenKopi extends StatelessWidget {
                               },
                               icon: const Icon(Icons.edit),
                             ),
+                            ),
                           ),
                         );
                       },
                     );
                   } else if (state is PanenError) {
-                    return Center(child: Text('Failed to load data: ${state.message}'));
+                    return Center(
+                        child: Text('Failed to load data: ${state.message}'));
                   }
                   return const Center(child: Text('Unknown state'));
                 },
@@ -116,6 +135,7 @@ class PanenKopi extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const AddPanen()),
             );
             if (result != null && result is PanenData) {
+              // ignore: use_build_context_synchronously
               context.read<PanenBloc>().add(AddPanenData(userId, result));
             }
           },

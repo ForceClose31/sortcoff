@@ -1,36 +1,27 @@
 import 'package:flutter/material.dart';
-import '../../../models/panen_data.dart';
+import '../../../models/finance_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class EditPanen extends StatefulWidget {
-  final PanenData panenData;
-
-  const EditPanen({super.key, required this.panenData});
+class AddFinance extends StatefulWidget {
+  const AddFinance({super.key});
 
   @override
-  State<EditPanen> createState() => _EditPanenState();
+  State<AddFinance> createState() => _AddFinanceState();
 }
 
-class _EditPanenState extends State<EditPanen> {
+class _AddFinanceState extends State<AddFinance> {
   final TextEditingController _judulController = TextEditingController();
-  final TextEditingController _jenisKopiController = TextEditingController();
+  final TextEditingController _nominalController =
+      TextEditingController();
   final TextEditingController _catatanController = TextEditingController();
   DateTime? _selectedDate;
-  int _banyakPanen = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _judulController.text = widget.panenData.judul;
-    _jenisKopiController.text = widget.panenData.jenisKopi;
-    _catatanController.text = widget.panenData.catatan;
-    _selectedDate = DateTime.parse(widget.panenData.tanggalPanen);
-    _banyakPanen = widget.panenData.banyak;
-  }
+  String _selectedTransactionType = 'Pemasukan';
+  final List<String> _transactionTypes = ['Pemasukan', 'Pengeluaran'];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
+      initialDate: DateTime.now(),
       firstDate: DateTime(2022),
       lastDate: DateTime(2030),
       builder: (BuildContext context, Widget? child) {
@@ -54,11 +45,42 @@ class _EditPanenState extends State<EditPanen> {
     }
   }
 
+  Future<void> _saveData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User not logged in')),
+      );
+      return;
+    }
+    FinanceData newData = FinanceData(
+      id: user.uid,
+      judul: _judulController.text,
+      tanggal: _selectedDate != null
+          ? '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}'
+          : '',
+      nominal: double.parse(
+          _nominalController.text), 
+      jenisTransaksi: _selectedTransactionType,
+      catatan: _catatanController.text,
+    );
+
+    try {
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context, newData);
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add data: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Data Panen'),
+        title: const Text('Tambah Data Keuangan'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -76,21 +98,6 @@ class _EditPanenState extends State<EditPanen> {
               controller: _judulController,
               decoration: const InputDecoration(
                 hintText: 'Masukkan judul pencatatan',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Jenis Kopi',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextFormField(
-              controller: _jenisKopiController,
-              decoration: const InputDecoration(
-                hintText: 'Masukkan jenis kopi',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -114,38 +121,42 @@ class _EditPanenState extends State<EditPanen> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Jumlah',
+              'Jenis Transaksi',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (_banyakPanen > 0) {
-                        _banyakPanen--;
-                      }
-                    });
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                Text(
-                  'Banyak: $_banyakPanen',
-                  style: const TextStyle(fontSize: 18),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _banyakPanen++;
-                    });
-                  },
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+            DropdownButton<String>(
+              value: _selectedTransactionType,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedTransactionType = newValue!;
+                });
+              },
+              items: _transactionTypes
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Nominal',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextFormField(
+              controller: _nominalController, 
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Masukkan nominal',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -168,20 +179,10 @@ class _EditPanenState extends State<EditPanen> {
               width: double.infinity,
               height: 47,
               child: ElevatedButton(
-                onPressed: () async {
-                  PanenData editedData = PanenData(
-                    id: widget.panenData.id,
-                    judul: _judulController.text,
-                    jenisKopi: _jenisKopiController.text,
-                    tanggalPanen: _selectedDate != null
-                        ? '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}'
-                        : widget.panenData.tanggalPanen,
-                    banyak: _banyakPanen,
-                    catatan: _catatanController.text,
-                  );
-                  Navigator.pop(context, editedData);
+                onPressed: () {
+                  _saveData();
                 },
-                child: const Text('Simpan Perubahan'),
+                child: const Text('Simpan'),
               ),
             ),
           ],
@@ -193,7 +194,7 @@ class _EditPanenState extends State<EditPanen> {
   @override
   void dispose() {
     _judulController.dispose();
-    _jenisKopiController.dispose();
+    _nominalController.dispose(); 
     _catatanController.dispose();
     super.dispose();
   }

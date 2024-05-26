@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../models/panen_data.dart';
+
 abstract class PanenEvent extends Equatable {
   const PanenEvent();
 
