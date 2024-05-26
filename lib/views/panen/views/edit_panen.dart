@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sortcoff/bloc/panen/panen_bloc.dart';
+import 'package:sortcoff/bloc/panen/panen_event.dart';
 import '../../../models/panen_data.dart';
 
 class EditPanen extends StatefulWidget {
@@ -56,6 +60,8 @@ class _EditPanenState extends State<EditPanen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final String userId = user != null ? user.uid : '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Data Panen'),
@@ -168,7 +174,7 @@ class _EditPanenState extends State<EditPanen> {
               width: double.infinity,
               height: 47,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   PanenData editedData = PanenData(
                     id: widget.panenData.id,
                     judul: _judulController.text,

@@ -14,13 +14,16 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
         useMaterial3: true,
       ),
-      home: FinanceRecordingScreen(),
+      home: const FinanceRecordingScreen(),
     );
   }
 }
 
 class FinanceRecordingScreen extends StatefulWidget {
+  const FinanceRecordingScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _FinanceRecordingScreenState createState() => _FinanceRecordingScreenState();
 }
 
@@ -37,8 +40,8 @@ class _FinanceRecordingScreenState extends State<FinanceRecordingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
-        title: Text('Pencatatan Keuangan'),
+        leading: const Icon(Icons.arrow_back),
+        title: const Text('Pencatatan Keuangan'),
       ),
       body: Column(
         children: [
@@ -67,7 +70,7 @@ class _FinanceRecordingScreenState extends State<FinanceRecordingScreen> {
           ),
           Expanded(
             child: ListView(
-              children: [
+              children: const [
                 FinanceItem(
                   title: 'Beli Pupuk',
                   subtitle: 'Pupuk ABC',
@@ -87,7 +90,7 @@ class _FinanceRecordingScreenState extends State<FinanceRecordingScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -99,7 +102,7 @@ class CategoryButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  CategoryButton({
+  const CategoryButton({super.key, 
     required this.label,
     required this.selected,
     required this.onTap,
@@ -124,7 +127,7 @@ class FinanceItem extends StatelessWidget {
   final String date;
   final String type;
 
-  FinanceItem({
+  const FinanceItem({super.key, 
     required this.title,
     required this.subtitle,
     required this.date,
@@ -134,9 +137,9 @@ class FinanceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
           backgroundImage:
               AssetImage('assets/coffee.jpg'), // Replace with your asset image
         ),
@@ -147,7 +150,7 @@ class FinanceItem extends StatelessWidget {
           children: [
             Text(
               type,
-              style: TextStyle(color: Colors.red),
+              style: const TextStyle(color: Colors.red),
             ),
             Text(date),
           ],
