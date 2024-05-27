@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sorpro.dart';
+import 'package:sortcoff/views/sortir/views/result.dart';
 
 class MySelSort extends StatefulWidget {
   const MySelSort({super.key});
@@ -73,7 +73,7 @@ class _MySelSortState extends State<MySelSort> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const MySorPro()),
+                      MaterialPageRoute(builder: (context) => const HasilPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

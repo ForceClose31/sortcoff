@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ShortCoff',
       home: const MyWelcome(),
-      initialRoute: '/Beranda',
+      initialRoute: '/',
       routes: {
         '/Beranda': (context) => const HomePage(),
         '/Keuangan': (context) => const FinanceRecordingScreen(),
