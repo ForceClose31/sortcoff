@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../global/widgets/navbar.dart';
+import 'edit.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -63,7 +64,13 @@ class _MyProfileState extends State<MyProfile> {
                                 size: 30,
                                 color: Colors.black,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MyEditProfile()),
+                                );
+                              },
                             ),
                             const Text('edit')
                           ],
@@ -177,15 +184,14 @@ class _MyProfileState extends State<MyProfile> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Text(
-                              '*********',
-                              style: TextStyle(
-                                color: Color(0xff674633),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            '*********',
+                            style: TextStyle(
+                              color: Color(0xff674633),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        
+                        ),
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {},
