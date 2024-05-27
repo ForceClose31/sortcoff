@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/panen_data.dart';
 
 class PanenService {
-  final CollectionReference _collectionReference = FirebaseFirestore.instance.collection('panen');
+  final CollectionReference _collectionReference =
+      FirebaseFirestore.instance.collection('panen');
 
   Future<List<PanenData>> fetchPanenData(String userId) async {
     try {
@@ -29,7 +30,8 @@ class PanenService {
     }
   }
 
-  Future<void> updatePanenData(String userId, String id, PanenData panenData) async {
+  Future<void> updatePanenData(
+      String userId, String id, PanenData panenData) async {
     try {
       await _collectionReference
           .doc(userId)
@@ -38,6 +40,30 @@ class PanenService {
           .update(panenData.toDocument());
     } catch (e) {
       throw Exception('Failed to update data: $e');
+    }
+  }
+
+  Future<void> updatePanenValues(String userId, String selectedJudul,
+      int redValue, int yellowValue, int greenValue) async {
+    try {
+      QuerySnapshot snapshot = await _collectionReference
+          .doc(userId)
+          .collection('userPanenData')
+          .where('judul', isEqualTo: selectedJudul)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        DocumentReference docRef = snapshot.docs.first.reference;
+        await docRef.update({
+          'red': redValue,
+          'yellow': yellowValue,
+          'green': greenValue,
+        });
+      } else {
+        throw Exception('Document with judul $selectedJudul not found');
+      }
+    } catch (e) {
+      throw Exception('Failed to update values: $e');
     }
   }
 }

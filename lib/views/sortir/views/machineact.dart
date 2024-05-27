@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sortcoff/views/home/views/homepage.dart';
+
+import 'selsort.dart';
 
 class MyMachineAct extends StatefulWidget {
   const MyMachineAct({super.key});
@@ -10,11 +13,20 @@ class MyMachineAct extends StatefulWidget {
 
 class _MyMachineActState extends State<MyMachineAct> {
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  void _sendDataToFirebase(int value){
-    _databaseReference
-      .child('test')
-      .set({'on' : value});
+  void _sendDataToFirebase(int value) {
+    _databaseReference.child('test').set({
+      'on': value,
+      'red': 0,
+      'blue': 0,
+      'green': 0,
+      'yellow': 0,
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MySelSort()),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,13 +34,16 @@ class _MyMachineActState extends State<MyMachineAct> {
         home: Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 40,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                  Navigator.pop(context);
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 40,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
                 },
               ),
               title: const Text('PEMILIHAN KOPI'),
@@ -103,9 +118,7 @@ class _MyMachineActState extends State<MyMachineAct> {
                           height: 20,
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            // Tindakan yang akan dilakukan saat tombol ditekan
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
                             shape: RoundedRectangleBorder(

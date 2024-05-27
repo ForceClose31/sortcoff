@@ -7,6 +7,9 @@ class PanenData {
   final String tanggalPanen;
   final int banyak;
   final String catatan;
+  final int red;
+  final int yellow;
+  final int green;
 
   PanenData({
     required this.id,
@@ -15,6 +18,9 @@ class PanenData {
     required this.tanggalPanen,
     required this.banyak,
     required this.catatan,
+    this.red = 0,
+    this.yellow = 0,
+    this.green = 0,
   });
 
   factory PanenData.fromDocument(DocumentSnapshot doc) {
@@ -25,6 +31,9 @@ class PanenData {
       tanggalPanen: doc['tanggalPanen'],
       banyak: doc['banyak'],
       catatan: doc['catatan'],
+      red: doc['red'] ?? 0,
+      yellow: doc['yellow'] ?? 0,
+      green: doc['green'] ?? 0,
     );
   }
 
@@ -35,6 +44,9 @@ class PanenData {
       'tanggalPanen': tanggalPanen,
       'banyak': banyak,
       'catatan': catatan,
+      'red': red,
+      'yellow': yellow,
+      'green': green,
     };
   }
 }

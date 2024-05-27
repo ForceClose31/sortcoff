@@ -11,8 +11,7 @@ class AddFinance extends StatefulWidget {
 
 class _AddFinanceState extends State<AddFinance> {
   final TextEditingController _judulController = TextEditingController();
-  final TextEditingController _nominalController =
-      TextEditingController();
+  final TextEditingController _nominalController = TextEditingController();
   final TextEditingController _catatanController = TextEditingController();
   DateTime? _selectedDate;
   String _selectedTransactionType = 'Pemasukan';
@@ -59,8 +58,7 @@ class _AddFinanceState extends State<AddFinance> {
       tanggal: _selectedDate != null
           ? '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}'
           : '',
-      nominal: double.parse(
-          _nominalController.text), 
+      nominal: double.parse(_nominalController.text),
       jenisTransaksi: _selectedTransactionType,
       catatan: _catatanController.text,
     );
@@ -151,7 +149,7 @@ class _AddFinanceState extends State<AddFinance> {
               ),
             ),
             TextFormField(
-              controller: _nominalController, 
+              controller: _nominalController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 hintText: 'Masukkan nominal',
@@ -194,7 +192,7 @@ class _AddFinanceState extends State<AddFinance> {
   @override
   void dispose() {
     _judulController.dispose();
-    _nominalController.dispose(); 
+    _nominalController.dispose();
     _catatanController.dispose();
     super.dispose();
   }

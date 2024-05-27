@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import firebase_auth package
 
 import 'sorpro.dart';
+import '../../../services/panen_services.dart'; // Import PanenService
 
 class HasilPage extends StatefulWidget {
-  const HasilPage({super.key});
+  final String selectedJudul;
+  const HasilPage({super.key, required this.selectedJudul});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -15,6 +18,9 @@ class _HasilPageState extends State<HasilPage> {
   // ignore: deprecated_member_use
   final DatabaseReference _dbRef = FirebaseDatabase.instance.reference();
   int _blueValue = 0;
+  int _redValue = 0;
+  int _yellowValue = 0;
+  int _greenValue = 0;
 
   @override
   void initState() {
@@ -31,6 +37,54 @@ class _HasilPageState extends State<HasilPage> {
         }
       }
     });
+
+    // Listen for red, yellow, and green values
+    _dbRef.child('test').child('red').onValue.listen((event) {
+      final dynamic value = event.snapshot.value;
+      if (value is int) {
+        setState(() {
+          _redValue = value;
+          _updateFirestore();
+        });
+      }
+    });
+
+    _dbRef.child('test').child('yellow').onValue.listen((event) {
+      final dynamic value = event.snapshot.value;
+      if (value is int) {
+        setState(() {
+          _yellowValue = value;
+          _updateFirestore();
+        });
+      }
+    });
+
+    _dbRef.child('test').child('green').onValue.listen((event) {
+      final dynamic value = event.snapshot.value;
+      if (value is int) {
+        setState(() {
+          _greenValue = value;
+          _updateFirestore();
+        });
+      }
+    });
+  }
+
+  void _updateFirestore() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId != null) {
+        await PanenService().updatePanenValues(
+          userId,
+          widget.selectedJudul,
+          _redValue,
+          _yellowValue,
+          _greenValue,
+        );
+      }
+    } catch (e) {
+      print('Error updating Firestore: $e');
+    }
   }
 
   void _showResultPopup() {
@@ -45,11 +99,7 @@ class _HasilPageState extends State<HasilPage> {
               const Text('Hasil Pemilahan',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
-              _buildResultRow('Biji Warna Merah', 400, 400, 400),
-              const SizedBox(height: 8),
-              _buildResultRow('Biji Warna Kuning', 400, 400, 400),
-              const SizedBox(height: 8),
-              _buildResultRow('Biji Warna Hijau', 400, 400, 400),
+              _buildResultRow(_redValue, _yellowValue, _greenValue),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -64,17 +114,16 @@ class _HasilPageState extends State<HasilPage> {
     );
   }
 
-  Widget _buildResultRow(String color, int large, int medium, int small) {
+  Widget _buildResultRow(int merah, int kuning, int hijau) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(color),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildResultDetail('L', large),
-            _buildResultDetail('M', medium),
-            _buildResultDetail('S', small),
+            _buildResultDetail('M', merah),
+            _buildResultDetail('K', kuning),
+            _buildResultDetail('H', hijau),
           ],
         ),
       ],
@@ -85,9 +134,9 @@ class _HasilPageState extends State<HasilPage> {
     return Row(
       children: [
         CircleAvatar(
-          backgroundColor: size == 'L'
+          backgroundColor: size == 'M'
               ? Colors.red
-              : (size == 'M' ? Colors.yellow : Colors.green),
+              : (size == 'K' ? Colors.yellow : Colors.green),
           radius: 10,
           child: Text(size,
               style: const TextStyle(color: Colors.white, fontSize: 12)),
@@ -100,8 +149,6 @@ class _HasilPageState extends State<HasilPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: MySorPro()
-    );
+    return const Scaffold(body: MySorPro());
   }
 }

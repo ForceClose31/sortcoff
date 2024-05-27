@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sortcoff/views/sortir/views/result.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import firebase_auth package
+
+import 'machineact.dart';
+import 'result.dart';
 
 class MySelSort extends StatefulWidget {
   const MySelSort({super.key});
@@ -10,10 +14,55 @@ class MySelSort extends StatefulWidget {
 
 class _MySelSortState extends State<MySelSort> {
   String? selectedCoffee;
-  List<String> coffeeTypes = ['option 1', 'option 2', 'option 3'];
+  List<String> coffeeTypes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCoffeeOptions();
+  }
+
+  void _fetchCoffeeOptions() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        CollectionReference userPanenDataRef = FirebaseFirestore.instance
+            .collection('panen')
+            .doc(userId)
+            .collection('userPanenData');
+
+        QuerySnapshot querySnapshot = await userPanenDataRef.get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          querySnapshot.docs.forEach((DocumentSnapshot document) {
+            String judul = document.get('judul');
+            setState(() {
+              coffeeTypes.add(judul);
+            });
+          });
+        } else {
+          setState(() {
+            coffeeTypes = ['No Coffee Options Available'];
+          });
+        }
+      }
+    } catch (e) {
+      // Error occurred while fetching data
+      print('Error fetching coffee options: $e');
+      setState(() {
+        coffeeTypes = ['Error Fetching Coffee Options'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (coffeeTypes.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
@@ -24,7 +73,12 @@ class _MySelSortState extends State<MySelSort> {
               size: 40,
               color: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyMachineAct()),
+              );
+            },
           ),
           title: const Text('PEMILIHAN KOPI'),
         ),
@@ -68,14 +122,19 @@ class _MySelSortState extends State<MySelSort> {
                 SizedBox(
                   height: size.height * 0.4,
                 ),
-
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HasilPage()),
-                    );
-                  },
+                  onPressed: selectedCoffee != null
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HasilPage(
+                                selectedJudul: selectedCoffee!,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
@@ -124,7 +183,6 @@ class _MySelSortState extends State<MySelSort> {
                     ),
                   ),
                 ),
-                // Add more widgets here as needed
               ],
             ),
           ],

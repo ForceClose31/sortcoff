@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sortcoff/models/panen_data.dart';
 
 class DetailPanen extends StatelessWidget {
   final PanenData panenData;
 
-  const DetailPanen({super.key, required this.panenData});
+  const DetailPanen({Key? key, required this.panenData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,34 +149,42 @@ class DetailPanen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 16),
-            _buildSortingResult('Biji Warna Merah'),
-            _buildSortingResult('Biji Warna Kuning'),
-            _buildSortingResult('Biji Warna Hijau'),
+            _buildSortingResult(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSortingResult(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget _buildSortingResult() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('panen')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .collection('userPanenData')
+          .doc(panenData.id)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        var data = snapshot.data!.data() as Map<String, dynamic>;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSortingChip('L', Colors.red, 400),
-            _buildSortingChip('M', Colors.yellow, 400),
-            _buildSortingChip('S', Colors.green, 400),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildSortingChip('M', Colors.red, data['red'] ?? 0),
+                _buildSortingChip('K', Colors.yellow, data['yellow'] ?? 0),
+                _buildSortingChip('H', Colors.green, data['green'] ?? 0),
+              ],
+            ),
+            const SizedBox(height: 16),
           ],
-        ),
-        const SizedBox(height: 16),
-      ],
+        );
+      },
     );
   }
 
