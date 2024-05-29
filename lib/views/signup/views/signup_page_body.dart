@@ -8,6 +8,8 @@ import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
 
 import 'email_input_field.dart';
 import 'google_signup_btn.dart';
+import 'name_input_field.dart';
+import 'phone_input_field copy.dart';
 import 'pwd_input_field.dart';
 
 class SignUpPageBody extends StatefulWidget {
@@ -22,7 +24,11 @@ class SignUpPageBody extends StatefulWidget {
 class _SignUpPageBodyState extends State<SignUpPageBody> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
   bool _isPasswordValid = false;
+  bool _isNameValid = false;
+  bool _isPhoneValid = false;
   bool _isEmailValid = false;
 
   @override
@@ -30,12 +36,16 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -60,6 +70,29 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
     // This is a basic email validation logic, you can replace it with your own validation logic
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(value);
+  }
+  void _checkNameValidity(String value) {
+    setState(() {
+      _isNameValid = _isValidName(value);
+    });
+  }
+
+  bool _isValidName(String value) {
+    // This is a basic email validation logic, you can replace it with your own validation logic
+    final nameRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return nameRegex.hasMatch(value);
+  }
+  void _checkPhoneValidity(String value) {
+    setState(() {
+      _isPhoneValid = _isValidPhone(value);
+    });
+  }
+
+  bool _isValidPhone(String value) {
+    // This is a basic email validation logic, you can replace it with your own validation logic
+    final phoneRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return phoneRegex.hasMatch(value);
+
   }
 
   @override
@@ -138,6 +171,42 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Text(
+                          'Nama',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        NameInputField(
+                          isNameValid: _isNameValid,
+                          onNameValidationChanged: (isValid) {
+                            setState(() {
+                              _isNameValid = isValid;
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Nomor Telepon',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PhoneInputField(
+                          isPhoneValid: _isPhoneValid,
+                          onPhoneValidationChanged: (isValid) {
+                            setState(() {
+                              _isPhoneValid = isValid;
+                            });
+                          },
+                        ),
                         const Text(
                           'Email',
                           style: TextStyle(

@@ -40,7 +40,7 @@ class _PwdInputFieldState extends State<PwdInputField> {
     final isPasswordStrong =
         !isPasswordWeak && _containsNumbers(value) && _containsUppercase(value);
     widget.onPasswordValidationChanged(
-        isPasswordStrong); // Mengirim hasil validasi ke atas
+        isPasswordStrong); 
   }
 
   bool _containsNumbers(String value) {

@@ -9,6 +9,8 @@ class BasicAuthBloc extends Bloc<BasicAuthEvent, BasicAuthState> {
   BasicAuthBloc(this._authRepo) : super(const BasicAuthState()) {
     on<EmailChanged>(_emailChanged);
     on<PasswordChanged>(_pwdChanged);
+    on<NameChanged>(_nameChanged);
+    on<PhoneChanged>(_phoneChanged);
     on<FormSubmit>(_formSubmit);
   }
 
@@ -19,7 +21,16 @@ class BasicAuthBloc extends Bloc<BasicAuthEvent, BasicAuthState> {
     final newState = state.copyWith(email: newValueForEmail);
     emit(newState);
   }
-
+  void _nameChanged(NameChanged event, Emitter<BasicAuthState> emit) {
+    final newValueForName = event.name;
+    final newState = state.copyWith(name: newValueForName);
+    emit(newState);
+  }
+  void _phoneChanged(PhoneChanged event, Emitter<BasicAuthState> emit) {
+    final newValueForPhone = event.phone;
+    final newState = state.copyWith(phone: newValueForPhone);
+    emit(newState);
+  }
   void _pwdChanged(PasswordChanged event, Emitter<BasicAuthState> emit) {
     emit(state.copyWith(password: event.password));
   }
