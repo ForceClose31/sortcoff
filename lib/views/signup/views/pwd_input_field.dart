@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:sortcoff/global/typography/typography.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 class PwdInputField extends StatefulWidget {
-  final bool isPasswordValid; // Tambahkan properti untuk validasi password
+  final bool isPasswordValid; 
   final void Function(bool)
-      onPasswordValidationChanged; // Callback untuk mengirim validasi password ke atas
+      onPasswordValidationChanged;
 
   const PwdInputField({
-    super.key,
+    Key? key,
     required this.isPasswordValid,
     required this.onPasswordValidationChanged,
   });
@@ -22,6 +22,7 @@ class PwdInputField extends StatefulWidget {
 class _PwdInputFieldState extends State<PwdInputField> {
   late TextEditingController _controller;
   bool _obscureText = true;
+  bool _showPassword = false;
 
   @override
   void initState() {
@@ -39,8 +40,7 @@ class _PwdInputFieldState extends State<PwdInputField> {
     final isPasswordWeak = value.length < 6;
     final isPasswordStrong =
         !isPasswordWeak && _containsNumbers(value) && _containsUppercase(value);
-    widget.onPasswordValidationChanged(
-        isPasswordStrong); 
+    widget.onPasswordValidationChanged(isPasswordStrong);
   }
 
   bool _containsNumbers(String value) {
@@ -53,57 +53,45 @@ class _PwdInputFieldState extends State<PwdInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _controller,
-      onChanged: (value) {
-        _checkPasswordStrength(value);
-        context.read<BasicAuthBloc>().add(PasswordChanged(value));
-      },
-      obscureText: _obscureText,
-      decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        hintStyle: AppTypoGraphy.getTextStyle(
-          color: AppColors.lightGrey,
-          fontSize: 18,
-        ),
-        hintText: 'Password',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.white,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _controller,
+          onChanged: (value) {
+            _checkPasswordStrength(value);
+            context.read<BasicAuthBloc>().add(PasswordChanged(value));
+          },
+          obscureText: _obscureText,
+          decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            hintStyle: AppTypoGraphy.getTextStyle(
+              color: AppColors.lightGrey,
+              fontSize: 18,
+            ),
+            hintText: 'Password',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(
+                color: AppColors.white,
+              ),
+            ),
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.black,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.lightGrey,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.lightGrey,
-          ),
-        ),
-        suffixIcon: IconButton(
-          onPressed: () {
+        CheckboxListTile(
+          title: Text('Show Password'),
+          value: _showPassword,
+          onChanged: (value) {
             setState(() {
-              _obscureText = !_obscureText;
+              _showPassword = value!;
+              _obscureText = !value;
             });
           },
-          icon: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
-            color: Colors.grey,
-          ),
+          controlAffinity: ListTileControlAffinity.leading,
+          contentPadding: EdgeInsets.zero,
         ),
-      ),
+      ],
     );
   }
 }

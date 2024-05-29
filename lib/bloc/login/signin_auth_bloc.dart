@@ -27,7 +27,7 @@ class SigninAuthBloc extends Bloc<SigninAuthEvent, SigninAuthState> {
     emit(state.copyWith(password: event.password));
   }
 
-  Future<void> _formSubmit(
+Future<void> _formSubmit(
       FormSubmit event, Emitter<SigninAuthState> emit) async {
     final email = state.email;
     final password = state.password;
@@ -47,7 +47,6 @@ class SigninAuthBloc extends Bloc<SigninAuthEvent, SigninAuthState> {
         emit(state.copyWith(status: FormStatus.success));
         // Navigate to Home Page only if sign in is successful
         Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );

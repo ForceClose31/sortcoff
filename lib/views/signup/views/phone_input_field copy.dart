@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:sortcoff/global/typography/typography.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 class PhoneInputField extends StatefulWidget {
   const PhoneInputField({
@@ -40,10 +40,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
   }
 
   bool _isValidPhone(String value) {
-    // This is a basic Phone validation logic, you can replace it with your own validation logic
-    // ignore: non_constant_identifier_Phones
-    final PhoneRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return PhoneRegex.hasMatch(value);
+    final phoneRegex = RegExp(r'^[0-9]+$');
+    return phoneRegex.hasMatch(value);
   }
 
   @override

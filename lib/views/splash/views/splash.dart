@@ -14,6 +14,7 @@ class _MyWelcomeState extends State<MyWelcome> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: const Color(0xff5E4437),
         body: Stack(
@@ -46,7 +47,7 @@ class _MyWelcomeState extends State<MyWelcome> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 15),
-                      height: 500,
+                      height: size.height * 0.57,
                       width: size.height * 1,
                       color: Colors.white,
                       child: Column(

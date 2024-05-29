@@ -22,8 +22,8 @@ class PrimaryBtn extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.85,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         decoration: BoxDecoration(
-          color: disabled ? Colors.grey : AppColors.blue,
-          borderRadius: BorderRadius.circular(30),
+          color: const Color(0xff5E4437),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Align(
           child: Text(

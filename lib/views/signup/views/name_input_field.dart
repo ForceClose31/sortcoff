@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:sortcoff/global/typography/typography.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 class NameInputField extends StatefulWidget {
   const NameInputField({
@@ -40,11 +40,11 @@ class _NameInputFieldState extends State<NameInputField> {
   }
 
   bool _isValidName(String value) {
-    // This is a basic Name validation logic, you can replace it with your own validation logic
-    // ignore: non_constant_identifier_names
-    final NameRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return NameRegex.hasMatch(value);
+    final nameRegex =
+        RegExp(r'^[a-zA-Z\s]+$');
+    return nameRegex.hasMatch(value);
   }
+
 
   @override
   Widget build(BuildContext context) {

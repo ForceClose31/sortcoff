@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:sortcoff/global/typography/typography.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 class EmailInputField extends StatefulWidget {
   const EmailInputField({

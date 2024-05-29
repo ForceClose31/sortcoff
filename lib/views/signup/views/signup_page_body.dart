@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sortcoff/global/constants/app_colors.dart';
-import 'package:sortcoff/global/typography/typography.dart';
 import 'package:sortcoff/global/widgets/primary_btn.dart';
 import 'package:sortcoff/views/signin/views/signin.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 import 'email_input_field.dart';
-import 'google_signup_btn.dart';
 import 'name_input_field.dart';
 import 'phone_input_field copy.dart';
 import 'pwd_input_field.dart';
@@ -71,6 +68,7 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(value);
   }
+
   void _checkNameValidity(String value) {
     setState(() {
       _isNameValid = _isValidName(value);
@@ -82,6 +80,7 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
     final nameRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return nameRegex.hasMatch(value);
   }
+
   void _checkPhoneValidity(String value) {
     setState(() {
       _isPhoneValid = _isValidPhone(value);
@@ -92,7 +91,6 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
     // This is a basic email validation logic, you can replace it with your own validation logic
     final phoneRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return phoneRegex.hasMatch(value);
-
   }
 
   @override
@@ -247,13 +245,17 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
                           height: 30,
                         ),
                         PrimaryBtn(
-                          text: 'Sign In',
+                          text: 'Sign Up',
                           ontap: () {
                             final email =
                                 context.read<BasicAuthBloc>().state.email;
                             final password =
                                 context.read<BasicAuthBloc>().state.password;
-                            if (email.isEmpty || password.isEmpty) {
+                            if (email.isEmpty ||
+                                password.isEmpty ||
+                                !_isEmailValid ||
+                                !_isNameValid ||
+                                !_isPhoneValid) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Masukkan Data dengan Benar'),
@@ -271,10 +273,6 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
                             }
                           },
                         ),
-                        const SizedBox(height: 20),
-                        _buildSignupText(context),
-                        const SizedBox(height: 60),
-                        const GoogleSignupBtn(),
                       ],
                     ),
                   ),
@@ -283,25 +281,6 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  GestureDetector _buildSignupText(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (cxt) => const SigninPage(),
-        ),
-      ),
-      child: Align(
-        child: Text(
-          "You have an account? Sign in.",
-          style: AppTypoGraphy.getTextStyle(
-            color: AppColors.lightGrey,
-          ),
-        ),
       ),
     );
   }

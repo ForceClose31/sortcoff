@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sortcoff/global/constants/app_colors.dart';
-import 'package:sortcoff/global/typography/typography.dart';
 import 'package:sortcoff/global/widgets/primary_btn.dart';
-import 'package:sortcoff/views/signin/blocs/signin_auth_bloc.dart';
-import 'package:sortcoff/views/signup/views/signup.dart';
+import 'package:sortcoff/bloc/login/signin_auth_bloc.dart';
+import 'package:sortcoff/repos/auth_repo/auth_repo.dart';
 
 import 'email_input_field.dart';
-import 'google_login_btn.dart';
 import 'pwd_input_field.dart';
 
 class SigninPageBody extends StatelessWidget {
   const SigninPageBody({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final AuthRepo _authRepo = AuthRepo();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ListView(
@@ -24,7 +22,6 @@ class SigninPageBody extends StatelessWidget {
           Stack(
             children: [
               Positioned(
-                top: 10,
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width * 1,
@@ -117,8 +114,8 @@ class SigninPageBody extends StatelessWidget {
                           height: 30,
                         ),
                         PrimaryBtn(
-                          text: 'Sign In',
-                          ontap: () {
+                          text: 'Login',
+                          ontap: () async {
                             final email =
                                 context.read<SigninAuthBloc>().state.email;
                             final password =
@@ -131,13 +128,20 @@ class SigninPageBody extends StatelessWidget {
                               );
                             } else {
                               context.read<SigninAuthBloc>().add(FormSubmit());
+                              // Tambahkan try-catch untuk menangkap pengecualian Firebase
+                              try {
+                                await _authRepo.signInWithUsernamePassword(
+                                    email, password);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Masukkan Data dengan Benar'),
+                                  ),
+                                );
+                              }
                             }
                           },
                         ),
-                        const SizedBox(height: 20),
-                        _buildSignupText(context),
-                        const SizedBox(height: 60),
-                        const GoogleLoginBtn()
                       ],
                     ),
                   )
@@ -146,25 +150,6 @@ class SigninPageBody extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  GestureDetector _buildSignupText(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (cxt) => const SignUpPage(),
-        ),
-      ),
-      child: Align(
-        child: Text(
-          "Don't have an account? Sign up.",
-          style: AppTypoGraphy.getTextStyle(
-            color: AppColors.lightGrey,
-          ),
-        ),
       ),
     );
   }

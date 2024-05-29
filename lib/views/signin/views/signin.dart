@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/lc.dart';
-import 'package:sortcoff/views/signin/blocs/signin_auth_bloc.dart';
+import 'package:sortcoff/bloc/login/signin_auth_bloc.dart';
 
 import 'signin_page_body.dart';
 

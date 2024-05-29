@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:sortcoff/global/typography/typography.dart';
-import 'package:sortcoff/views/signin/blocs/signin_auth_bloc.dart';
+import 'package:sortcoff/bloc/login/signin_auth_bloc.dart';
 
 class EmailInputField extends StatelessWidget {
   const EmailInputField({
@@ -23,24 +23,6 @@ class EmailInputField extends StatelessWidget {
         ),
         hintText: 'Email',
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.white,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.white,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(
-            color: AppColors.white,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: const BorderSide(
             color: AppColors.white,

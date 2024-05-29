@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sortcoff/global/constants/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/lc.dart';
-import 'package:sortcoff/views/home/views/homepage.dart';
-import 'package:sortcoff/views/signup/blocs/basic_auth/basic_auth_bloc.dart';
-import 'package:sortcoff/views/signup/blocs/google_auth/google_auth_bloc.dart';
-
+import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 import 'signup_page_body.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -18,9 +15,6 @@ class SignUpPage extends StatelessWidget {
         BlocProvider(
           create: (context) => BasicAuthBloc(lc()),
         ),
-        BlocProvider(
-          create: (context) => GoogleAuthBloc(lc()),
-        )
       ],
       child: const _Signin(),
     );
@@ -33,24 +27,12 @@ class _Signin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<GoogleAuthBloc, GoogleAuthState>(
-        listener: (context, state) {
-          if (state is GoogleAuthSuccess) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (cxt) => const HomePage(),
-                ),
-                (route) => false);
-          }
-        },
-        child: Stack(
-          children: [
-            _buildBgImg(context),
-            _buildBgOverlay(context),
-            const SignUpPageBody(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          _buildBgImg(context),
+          _buildBgOverlay(context),
+          const SignUpPageBody(),
+        ],
       ),
     );
   }
