@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Navigasi extends StatelessWidget {
-  const Navigasi({super.key});
+  final String currentPage;
+
+  const Navigasi({super.key, required this.currentPage});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 65,
+      height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -14,41 +16,45 @@ class Navigasi extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: const Offset(0, 2), // changes position of shadow
+            offset: const Offset(0, 2),
           ),
         ],
       ),
-    
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildNavItem(context, Icons.home, '/Beranda', 'Beranda'),
-            buildNavItem(context, Icons.account_balance_wallet, '/Keuangan', 'Keuangan'),
-            buildNavItem(context, Icons.person, '/Profil', 'Profil'),
-          ],
-        ),
-      
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          buildNavItem(context, Icons.home, '/Beranda', 'Beranda'),
+          buildNavItem(
+              context, Icons.account_balance_wallet, '/Keuangan', 'Keuangan'),
+          buildNavItem(context, Icons.person, '/Profil', 'Profil'),
+        ],
+      ),
     );
   }
 
-  Widget buildNavItem(BuildContext context, IconData iconData, String route, String label) {
+  Widget buildNavItem(
+      BuildContext context, IconData iconData, String route, String label) {
+    final bool isSelected = route == currentPage;
+
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, route);
+              if (!isSelected) {
+                Navigator.pushReplacementNamed(context, route);
+              }
             },
             icon: Icon(
               iconData,
-              color: Colors.grey, // Unselected color
+              color: isSelected ? const Color(0xFF674633) : Colors.grey,
             ),
           ),
           Text(
             label,
-            style: const TextStyle(
-              color: Colors.grey, // Unselected color
+            style: TextStyle(
+              color: isSelected ? const Color(0xFF674633) : Colors.grey,
             ),
           ),
         ],

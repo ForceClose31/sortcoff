@@ -127,7 +127,7 @@ class FinanceRecordingView extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        bottomNavigationBar: const Navigasi());
+        bottomNavigationBar: const Navigasi(currentPage: '/Keuangan'));
   }
 }
 

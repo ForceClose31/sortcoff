@@ -73,7 +73,7 @@ class PanenKopi extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Image.asset(
-                                    'assets/images/content/img1.png',
+                                    'assets/images/content/kopi.png',
                                     width: 80,
                                     height: 80,
                                     fit: BoxFit.cover,

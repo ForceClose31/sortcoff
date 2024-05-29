@@ -332,7 +332,7 @@ class _MyProfileState extends State<MyProfile> {
           },
         ),
       ),
-      bottomNavigationBar: const Navigasi(),
+      bottomNavigationBar: const Navigasi(currentPage: '/Profil'),
     );
   }
 }
