@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/finance_data.dart'; // Rename PanenData to FinanceData
+import '../../../models/finance_data.dart'; 
 
 class EditFinance extends StatefulWidget {
   final FinanceData financeData;
@@ -40,7 +40,7 @@ class _EditFinanceState extends State<EditFinance> {
             TextFormField(
               controller: _judulController,
               decoration: const InputDecoration(
-                hintText: 'Masukkan judul catatan finance', // Change hint text
+                hintText: 'Masukkan judul catatan finance', 
                 border: OutlineInputBorder(),
               ),
             ),
