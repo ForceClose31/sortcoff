@@ -1,26 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 
 class AuthRepo {
   final _auth = FirebaseAuth.instance;
-  final String esp32Url =
-      'http://<ESP32_IP_ADDRESS>/token';
+  final _firestore = FirebaseFirestore.instance;
+
   Future<User?> createUserWithUsernamePassword(
-      String email, String password) async {
+      String email, String password, String name, String phoneNumber) async {
     try {
       final creds = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      if (creds.user != null) {
-        await _sendTokenToESP32();
-      }
+
+      // Add user data to Firestore collection "users"
+      final userRef = _firestore.collection('users').doc(creds.user!.uid);
+      await userRef.set({
+        'email': email,
+        'name': name,
+        'phoneNumber': phoneNumber,
+      });
+
       return creds.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        // ignore: avoid_print
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        // ignore: avoid_print
         print('The account already exists for that email.');
       }
       return null;
@@ -32,9 +36,7 @@ class AuthRepo {
     try {
       final creds = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      if (creds.user != null) {
-        await _sendTokenToESP32();
-      }
+
       return creds.user;
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Error signing in. Please try again later.';
@@ -76,9 +78,7 @@ class AuthRepo {
         idToken: googleAuth.idToken,
       );
       final userCredential = await _auth.signInWithCredential(creds);
-      if (userCredential.user != null) {
-        await _sendTokenToESP32();
-      }
+
       return userCredential.user;
     } catch (e) {
       print(e);
@@ -86,24 +86,14 @@ class AuthRepo {
     }
   }
 
-  Future<void> _sendTokenToESP32() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      String? idToken = await user.getIdToken();
-      try {
-        var response = await http.post(
-          Uri.parse(esp32Url),
-          headers: {"Content-Type": "text/plain"},
-          body: idToken,
-        );
-        if (response.statusCode == 200) {
-          print("Token sent successfully");
-        } else {
-          print("Failed to send token: ${response.statusCode}");
-        }
-      } catch (e) {
-        print("Error sending token: $e");
-      }
+  Future<void> addProfileUser(String name, String phoneNumber) async {
+    final currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      final userRef = _firestore.collection('users').doc(currentUser.uid);
+      await userRef.update({
+        'name': name,
+        'phoneNumber': phoneNumber,
+      });
     }
   }
 }

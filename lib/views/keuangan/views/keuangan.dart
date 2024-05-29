@@ -9,6 +9,7 @@ import '../../../bloc/finance/finance_state.dart';
 import '../../../global/widgets/navbar.dart';
 import '../../../services/finance_services.dart';
 import 'add_keuangan.dart';
+import 'edit_keuangan.dart';
 
 class FinanceRecordingScreen extends StatelessWidget {
   const FinanceRecordingScreen({super.key});
@@ -126,8 +127,7 @@ class FinanceRecordingView extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        bottomNavigationBar: const Navigasi()
-      );
+        bottomNavigationBar: const Navigasi());
   }
 }
 
@@ -157,7 +157,6 @@ class CategoryButton extends StatelessWidget {
 
 class FinanceItem extends StatelessWidget {
   final FinanceData financeData;
-
   const FinanceItem({
     Key? key,
     required this.financeData,
@@ -165,6 +164,8 @@ class FinanceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final String userId = user != null ? user.uid : '';
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -182,14 +183,37 @@ class FinanceItem extends StatelessWidget {
           ),
           title: Text(financeData.judul),
           subtitle: Text(financeData.catatan),
-          trailing: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                financeData.jenisTransaksi,
-                style: const TextStyle(color: Colors.red),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    financeData.jenisTransaksi,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  Text(financeData.tanggal),
+                ],
               ),
-              Text(financeData.tanggal),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditFinance(financeData: financeData),
+                    ),
+                  ).then((editedData) {
+                    if (editedData != null && editedData is FinanceData) {
+                      context
+                          .read<FinanceBloc>()
+                          .add(UpdateFinanceData(userId, editedData));
+                    }
+                  });
+                },
+                icon: const Icon(Icons.edit),
+              ),
             ],
           ),
         ),

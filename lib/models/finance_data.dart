@@ -9,12 +9,12 @@ class FinanceData {
   final String catatan;
 
   FinanceData({
-    required this.id,
     required this.judul,
-    required this.jenisTransaksi,
-    required this.tanggal,
-    required this.nominal,
-    required this.catatan,
+    required this.id,
+    this.jenisTransaksi = '',
+    this.tanggal = '',
+    this.nominal = 0,
+    this.catatan = '',
   });
 
   factory FinanceData.fromDocument(DocumentSnapshot doc) {
@@ -22,9 +22,9 @@ class FinanceData {
       id: doc.id,
       judul: doc['judul'],
       jenisTransaksi: doc['jenisTransaksi'],
-      tanggal: doc['tanggal'],
-      nominal: doc['nominal'],
-      catatan: doc['catatan'],
+      tanggal: doc['tanggal'] ?? 0,
+      nominal: doc['nominal'] ?? 0,
+      catatan: doc['catatan'] ?? 0,
     );
   }
 
