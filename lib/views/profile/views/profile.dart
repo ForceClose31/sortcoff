@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sortcoff/views/splash/views/splash.dart';
 
 import '../../../bloc/profile/profile_bloc.dart';
 import '../../../bloc/profile/profile_event.dart';
@@ -258,7 +259,37 @@ class _MyProfileState extends State<MyProfile> {
                                 const SizedBox(height: 30),
                                 ElevatedButton(
                                   onPressed: () {
-                                    _profileBloc.add(LogOutUser());
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title:
+                                              const Text('Konfirmasi Logout'),
+                                          content: const Text(
+                                              'Anda yakin ingin keluar?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Tidak'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                _profileBloc.add(LogOutUser());
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const MyWelcome()),
+                                                );
+                                              },
+                                              child: const Text('Ya'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xff674633),
