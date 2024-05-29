@@ -1,4 +1,7 @@
+// lib/bloc/machine_event.dart
+
 import 'package:equatable/equatable.dart';
+import '../../models/machine_data.dart';
 
 abstract class MachineEvent extends Equatable {
   const MachineEvent();
@@ -7,11 +10,13 @@ abstract class MachineEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SendDataToFirebase extends MachineEvent {
-  final int value;
+class ActivateMachine extends MachineEvent {
+  final MachineData machineData;
 
-  const SendDataToFirebase(this.value);
+  const ActivateMachine(this.machineData);
 
   @override
-  List<Object> get props => [value];
+  List<Object> get props => [machineData];
 }
+
+class DeactivateMachine extends MachineEvent {}

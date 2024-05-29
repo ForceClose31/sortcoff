@@ -1,35 +1,25 @@
 class MachineData {
-  final int on;
-  final int red;
-  final int blue;
-  final int green;
-  final int yellow;
+  int on;
+  int blue;
+  int red;
+  int yellow;
+  int green;
 
   MachineData({
     required this.on,
-    required this.red,
-    required this.blue,
-    required this.green,
-    required this.yellow,
+    this.blue = 0,
+    this.red = 0,
+    this.yellow = 0,
+    this.green = 0,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'on': on,
-      'red': red,
       'blue': blue,
-      'green': green,
+      'red': red,
       'yellow': yellow,
+      'green': green,
     };
-  }
-
-  factory MachineData.fromMap(Map<String, dynamic> map) {
-    return MachineData(
-      on: map['on'] as int,
-      red: map['red'] as int,
-      blue: map['blue'] as int,
-      green: map['green'] as int,
-      yellow: map['yellow'] as int,
-    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import firebase_auth package
-
+import 'package:sortcoff/views/home/views/homepage.dart';
 import 'sorpro.dart';
 import '../../../services/panen_services.dart'; // Import PanenService
 
@@ -103,7 +103,10 @@ class _HasilPageState extends State<HasilPage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
                 },
                 child: const Text('Selesaikan'),
               ),

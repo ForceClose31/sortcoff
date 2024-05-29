@@ -1,5 +1,6 @@
+// lib/bloc/machine_state.dart
+
 import 'package:equatable/equatable.dart';
-import 'package:sortcoff/models/machine_data.dart';
 
 abstract class MachineState extends Equatable {
   const MachineState();
@@ -12,14 +13,9 @@ class MachineInitial extends MachineState {}
 
 class MachineLoading extends MachineState {}
 
-class MachineLoaded extends MachineState {
-  final MachineData machineData;
+class MachineActivated extends MachineState {}
 
-  const MachineLoaded(this.machineData);
-
-  @override
-  List<Object> get props => [machineData];
-}
+class MachineDeactivated extends MachineState {}
 
 class MachineError extends MachineState {
   final String message;
