@@ -53,6 +53,10 @@ class _EditFinanceState extends State<EditFinance> {
                   FinanceData editedData = FinanceData(
                     id: widget.financeData.id,
                     judul: _judulController.text,
+                    jenisTransaksi: widget.financeData.jenisTransaksi,
+                    tanggal: widget.financeData.tanggal,
+                    nominal: widget.financeData.nominal,
+                    catatan: widget.financeData.catatan
                   );
                   Navigator.pop(context, editedData);
                 },
