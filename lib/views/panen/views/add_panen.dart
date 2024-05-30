@@ -14,10 +14,9 @@ class _AddPanenState extends State<AddPanen> {
   final TextEditingController _judulController = TextEditingController();
   final TextEditingController _jenisKopiController = TextEditingController();
   final TextEditingController _catatanController = TextEditingController();
-  int _banyakPanen = 0;
+  final TextEditingController _banyakPanenController = TextEditingController();
   DateTime? _selectedDate;
   final PanenService _panenService = PanenService();
-
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -56,11 +55,12 @@ class _AddPanenState extends State<AddPanen> {
       return;
     }
     PanenData newData = PanenData(
-      id:  user.uid, 
+      id: user.uid,
       judul: _judulController.text,
       jenisKopi: _jenisKopiController.text,
-      tanggalPanen: '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
-      banyak: _banyakPanen,
+      tanggalPanen:
+          '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
+      banyak: int.tryParse(_banyakPanenController.text) ?? 0,
       catatan: _catatanController.text,
     );
 
@@ -135,32 +135,20 @@ class _AddPanenState extends State<AddPanen> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (_banyakPanen > 0) {
-                        _banyakPanen--;
-                      }
-                    });
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                Text(
-                  'Banyak: $_banyakPanen',
-                  style: const TextStyle(fontSize: 18),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _banyakPanen++;
-                    });
-                  },
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+            const Text(
+              'Banyak Panen',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextFormField(
+              controller: _banyakPanenController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Masukkan banyak panen',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -199,6 +187,7 @@ class _AddPanenState extends State<AddPanen> {
   void dispose() {
     _judulController.dispose();
     _jenisKopiController.dispose();
+    _banyakPanenController.dispose();
     _catatanController.dispose();
     super.dispose();
   }

@@ -14,8 +14,8 @@ class _EditPanenState extends State<EditPanen> {
   final TextEditingController _judulController = TextEditingController();
   final TextEditingController _jenisKopiController = TextEditingController();
   final TextEditingController _catatanController = TextEditingController();
+  final TextEditingController _banyakPanenController = TextEditingController();
   DateTime? _selectedDate;
-  int _banyakPanen = 0;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _EditPanenState extends State<EditPanen> {
     _jenisKopiController.text = widget.panenData.jenisKopi;
     _catatanController.text = widget.panenData.catatan;
     _selectedDate = DateTime.parse(widget.panenData.tanggalPanen);
-    _banyakPanen = widget.panenData.banyak;
+    _banyakPanenController.text = widget.panenData.banyak.toString();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -120,32 +120,18 @@ class _EditPanenState extends State<EditPanen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (_banyakPanen > 0) {
-                        _banyakPanen--;
-                      }
-                    });
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                Text(
-                  'Banyak: $_banyakPanen',
-                  style: const TextStyle(fontSize: 18),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _banyakPanen++;
-                    });
-                  },
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+            TextFormField(
+              controller: _banyakPanenController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Masukkan banyak panen',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                if (int.tryParse(value) == null) {
+                  _banyakPanenController.text = '0';
+                }
+              },
             ),
             const SizedBox(height: 16),
             const Text(
@@ -169,14 +155,28 @@ class _EditPanenState extends State<EditPanen> {
               height: 47,
               child: ElevatedButton(
                 onPressed: () async {
+                  if (_judulController.text.isEmpty ||
+                      _jenisKopiController.text.isEmpty ||
+                      _banyakPanenController.text.isEmpty ||
+                      _selectedDate == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Masukkan Data dengan Benar')),
+                    );
+                    return;
+                  }
+                  final banyakPanen = int.tryParse(_banyakPanenController.text);
+                  if (banyakPanen == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Masukkan Data dengan Benar')),
+                    );
+                    return;
+                  }
                   PanenData editedData = PanenData(
                     id: widget.panenData.id,
                     judul: _judulController.text,
                     jenisKopi: _jenisKopiController.text,
-                    tanggalPanen: _selectedDate != null
-                        ? '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}'
-                        : widget.panenData.tanggalPanen,
-                    banyak: _banyakPanen,
+                    tanggalPanen: '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
+                    banyak: banyakPanen,
                     catatan: _catatanController.text,
                   );
                   Navigator.pop(context, editedData);
@@ -194,6 +194,7 @@ class _EditPanenState extends State<EditPanen> {
   void dispose() {
     _judulController.dispose();
     _jenisKopiController.dispose();
+    _banyakPanenController.dispose();
     _catatanController.dispose();
     super.dispose();
   }

@@ -45,6 +45,24 @@ class _AddFinanceState extends State<AddFinance> {
   }
 
   Future<void> _saveData() async {
+    if (_judulController.text.isEmpty ||
+        _selectedDate == null ||
+        _nominalController.text.isEmpty ||
+        double.tryParse(_nominalController.text) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Masukkan Data dengan Benar')),
+      );
+      return;
+    }
+
+    final RegExp symbolRegExp = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+    if (symbolRegExp.hasMatch(_judulController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Masukkan Data dengan Benar')),
+      );
+      return;
+    }
+
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,6 +70,7 @@ class _AddFinanceState extends State<AddFinance> {
       );
       return;
     }
+
     FinanceData newData = FinanceData(
       id: user.uid,
       judul: _judulController.text,

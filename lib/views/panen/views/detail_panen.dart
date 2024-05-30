@@ -6,7 +6,7 @@ import 'package:sortcoff/models/panen_data.dart';
 class DetailPanen extends StatelessWidget {
   final PanenData panenData;
 
-  const DetailPanen({Key? key, required this.panenData}) : super(key: key);
+  const DetailPanen({super.key, required this.panenData});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +21,17 @@ class DetailPanen extends StatelessWidget {
           children: [
             const Text(
               'Jenis Kopi',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 8),
             Text(
               panenData.jenisKopi,
-              style: const TextStyle(color: Colors.brown),
+              style: const TextStyle(color: Colors.brown, fontSize: 18),
             ),
             const SizedBox(height: 16),
             const Text(
               'Tanggal',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 8),
             Row(
@@ -106,7 +106,7 @@ class DetailPanen extends StatelessWidget {
             const SizedBox(height: 16),
             const Text(
               'Banyak',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 8),
             Row(
@@ -120,14 +120,14 @@ class DetailPanen extends StatelessWidget {
                 ),
                 const Text(
                   'Kg',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             const Text(
               'Catatan',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 8),
             TextField(

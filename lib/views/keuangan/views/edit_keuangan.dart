@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/finance_data.dart'; 
+import '../../../models/finance_data.dart';
 
 class EditFinance extends StatefulWidget {
   final FinanceData financeData;
@@ -19,11 +19,40 @@ class _EditFinanceState extends State<EditFinance> {
     _judulController.text = widget.financeData.judul;
   }
 
+  void _saveData() {
+    // Check if the text field is empty
+    if (_judulController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Masukkan Data dengan Benar')),
+      );
+      return;
+    }
+
+    final RegExp symbolRegExp = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+    if (symbolRegExp.hasMatch(_judulController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Masukkan Data dengan Benar')),
+      );
+      return;
+    }
+
+    FinanceData editedData = FinanceData(
+      id: widget.financeData.id,
+      judul: _judulController.text,
+      jenisTransaksi: widget.financeData.jenisTransaksi,
+      tanggal: widget.financeData.tanggal,
+      nominal: widget.financeData.nominal,
+      catatan: widget.financeData.catatan,
+    );
+
+    Navigator.pop(context, editedData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Data Finance'), // Change title
+        title: const Text('Edit Data Finance'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +60,7 @@ class _EditFinanceState extends State<EditFinance> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Judul Catatan Finance', // Change title
+              'Judul Catatan Finance',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -40,7 +69,7 @@ class _EditFinanceState extends State<EditFinance> {
             TextFormField(
               controller: _judulController,
               decoration: const InputDecoration(
-                hintText: 'Masukkan judul catatan finance', 
+                hintText: 'Masukkan judul catatan finance',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -49,17 +78,7 @@ class _EditFinanceState extends State<EditFinance> {
               width: double.infinity,
               height: 47,
               child: ElevatedButton(
-                onPressed: () {
-                  FinanceData editedData = FinanceData(
-                    id: widget.financeData.id,
-                    judul: _judulController.text,
-                    jenisTransaksi: widget.financeData.jenisTransaksi,
-                    tanggal: widget.financeData.tanggal,
-                    nominal: widget.financeData.nominal,
-                    catatan: widget.financeData.catatan
-                  );
-                  Navigator.pop(context, editedData);
-                },
+                onPressed: _saveData,
                 child: const Text('Simpan Perubahan'),
               ),
             ),

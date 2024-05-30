@@ -189,10 +189,23 @@ class FinanceItem extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    financeData.jenisTransaksi,
-                    style: const TextStyle(color: Colors.red),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: financeData.jenisTransaksi == 'Pemasukan'
+                          ? const Color(0xFF004FAC)
+                          : const Color(0xFFAC0000),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      financeData.jenisTransaksi,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
+                  const SizedBox(height: 4), // Add some space between the text and the transaction type container
                   Text(financeData.tanggal),
                 ],
               ),
