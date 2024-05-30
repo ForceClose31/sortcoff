@@ -9,9 +9,9 @@ abstract class PanenEvent extends Equatable {
 }
 
 class LoadPanenData extends PanenEvent {
-  final String userId; 
+  final String userId;
 
-  const LoadPanenData(this.userId); 
+  const LoadPanenData(this.userId);
 
   @override
   List<Object?> get props => [userId];
@@ -19,7 +19,7 @@ class LoadPanenData extends PanenEvent {
 
 class AddPanenData extends PanenEvent {
   final String userId;
-  final PanenData panenData;
+  final M_Panen panenData;
 
   const AddPanenData(this.userId, this.panenData);
 
@@ -29,7 +29,7 @@ class AddPanenData extends PanenEvent {
 
 class UpdatePanenData extends PanenEvent {
   final String userId;
-  final PanenData panenData;
+  final M_Panen panenData;
 
   const UpdatePanenData(this.userId, this.panenData);
 

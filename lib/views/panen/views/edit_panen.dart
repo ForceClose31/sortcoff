@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../models/panen_data.dart';
 
 class EditPanen extends StatefulWidget {
-  final PanenData panenData;
+  final M_Panen panenData;
 
   const EditPanen({super.key, required this.panenData});
 
@@ -160,22 +160,25 @@ class _EditPanenState extends State<EditPanen> {
                       _banyakPanenController.text.isEmpty ||
                       _selectedDate == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Masukkan Data dengan Benar')),
+                      const SnackBar(
+                          content: Text('Masukkan Data dengan Benar')),
                     );
                     return;
                   }
                   final banyakPanen = int.tryParse(_banyakPanenController.text);
                   if (banyakPanen == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Masukkan Data dengan Benar')),
+                      const SnackBar(
+                          content: Text('Masukkan Data dengan Benar')),
                     );
                     return;
                   }
-                  PanenData editedData = PanenData(
+                  M_Panen editedData = M_Panen(
                     id: widget.panenData.id,
                     judul: _judulController.text,
                     jenisKopi: _jenisKopiController.text,
-                    tanggalPanen: '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
+                    tanggalPanen:
+                        '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
                     banyak: banyakPanen,
                     catatan: _catatanController.text,
                   );

@@ -11,7 +11,7 @@ abstract class FinanceState extends Equatable {
 class FinanceLoading extends FinanceState {}
 
 class FinanceLoaded extends FinanceState {
-  final List<FinanceData> financeData;
+  final List<M_PencatatanKeuangan> financeData;
   final String selectedCategory;
 
   const FinanceLoaded({
@@ -23,7 +23,7 @@ class FinanceLoaded extends FinanceState {
   List<Object> get props => [financeData, selectedCategory];
 
   FinanceLoaded copyWith({
-    List<FinanceData>? financeData,
+    List<M_PencatatanKeuangan>? financeData,
     String? selectedCategory,
   }) {
     return FinanceLoaded(
@@ -32,7 +32,7 @@ class FinanceLoaded extends FinanceState {
     );
   }
 
-  List<FinanceData> get filteredData {
+  List<M_PencatatanKeuangan> get filteredData {
     if (selectedCategory == 'All') {
       return financeData;
     } else {

@@ -116,10 +116,9 @@ class SigninPageBody extends StatelessWidget {
                         PrimaryBtn(
                           text: 'Login',
                           ontap: () async {
-                            final email =
-                                context.read<SigninAuthBloc>().state.email;
+                            final email = context.read<VM_Login>().state.email;
                             final password =
-                                context.read<SigninAuthBloc>().state.password;
+                                context.read<VM_Login>().state.password;
                             if (email.isEmpty || password.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -127,7 +126,7 @@ class SigninPageBody extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              context.read<SigninAuthBloc>().add(FormSubmit());
+                              context.read<VM_Login>().add(FormSubmit());
                               // Tambahkan try-catch untuk menangkap pengecualian Firebase
                               try {
                                 await _authRepo.signInWithUsernamePassword(

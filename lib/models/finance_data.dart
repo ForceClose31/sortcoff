@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FinanceData {
+class M_PencatatanKeuangan {
   final String id;
   final String judul;
   final String jenisTransaksi;
@@ -8,7 +8,7 @@ class FinanceData {
   final double nominal;
   final String catatan;
 
-  FinanceData({
+  M_PencatatanKeuangan({
     required this.judul,
     required this.id,
     this.jenisTransaksi = '',
@@ -17,8 +17,8 @@ class FinanceData {
     this.catatan = '',
   });
 
-  factory FinanceData.fromDocument(DocumentSnapshot doc) {
-    return FinanceData(
+  factory M_PencatatanKeuangan.fromDocument(DocumentSnapshot doc) {
+    return M_PencatatanKeuangan(
       id: doc.id,
       judul: doc['judul'],
       jenisTransaksi: doc['jenisTransaksi'],

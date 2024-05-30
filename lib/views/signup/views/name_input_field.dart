@@ -40,11 +40,9 @@ class _NameInputFieldState extends State<NameInputField> {
   }
 
   bool _isValidName(String value) {
-    final nameRegex =
-        RegExp(r'^[a-zA-Z\s]+$');
+    final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
     return nameRegex.hasMatch(value);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +50,7 @@ class _NameInputFieldState extends State<NameInputField> {
       controller: _controller,
       onChanged: (value) {
         _checkNameValidity(value);
-        context.read<BasicAuthBloc>().add(NameChanged(value));
+        context.read<VM_SignUp>().add(NameChanged(value));
       },
       decoration: InputDecoration(
         contentPadding:

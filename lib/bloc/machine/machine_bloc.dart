@@ -4,10 +4,10 @@ import '../../services/machine_services.dart';
 import 'machine_event.dart';
 import 'machine_state.dart';
 
-class MachineBloc extends Bloc<MachineEvent, MachineState> {
+class VM_Pemilah extends Bloc<MachineEvent, MachineState> {
   final MachineService machineService;
 
-  MachineBloc({required this.machineService}) : super(MachineInitial()) {
+  VM_Pemilah({required this.machineService}) : super(MachineInitial()) {
     on<ActivateMachine>((event, emit) async {
       emit(MachineLoading());
       try {

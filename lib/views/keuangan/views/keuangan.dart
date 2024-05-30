@@ -20,7 +20,7 @@ class FinanceRecordingScreen extends StatelessWidget {
     final String userId = user != null ? user.uid : '';
 
     return BlocProvider(
-      create: (context) => FinanceBloc(financeService: FinanceService())
+      create: (context) => VM_Keuangan(financeService: FinanceService())
         ..add(LoadFinanceData(userId)),
       child: FinanceRecordingView(userId: userId),
     );
@@ -47,7 +47,7 @@ class FinanceRecordingView extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: BlocBuilder<FinanceBloc, FinanceState>(
+              child: BlocBuilder<VM_Keuangan, FinanceState>(
                 builder: (context, state) {
                   if (state is FinanceLoaded) {
                     return Row(
@@ -57,21 +57,21 @@ class FinanceRecordingView extends StatelessWidget {
                           label: 'Pemasukan',
                           selected: state.selectedCategory == 'Pemasukan',
                           onTap: () => context
-                              .read<FinanceBloc>()
+                              .read<VM_Keuangan>()
                               .add(const UpdateCategory('Pemasukan')),
                         ),
                         CategoryButton(
                           label: 'Pengeluaran',
                           selected: state.selectedCategory == 'Pengeluaran',
                           onTap: () => context
-                              .read<FinanceBloc>()
+                              .read<VM_Keuangan>()
                               .add(const UpdateCategory('Pengeluaran')),
                         ),
                         CategoryButton(
                           label: 'All',
                           selected: state.selectedCategory == 'All',
                           onTap: () => context
-                              .read<FinanceBloc>()
+                              .read<VM_Keuangan>()
                               .add(const UpdateCategory('All')),
                         ),
                       ],
@@ -82,7 +82,7 @@ class FinanceRecordingView extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: BlocBuilder<FinanceBloc, FinanceState>(
+              child: BlocBuilder<VM_Keuangan, FinanceState>(
                 builder: (context, state) {
                   if (state is FinanceLoading) {
                     return const Center(child: CircularProgressIndicator());
@@ -119,9 +119,9 @@ class FinanceRecordingView extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const AddFinance()),
             );
-            if (result != null && result is FinanceData) {
+            if (result != null && result is M_PencatatanKeuangan) {
               // ignore: use_build_context_synchronously
-              context.read<FinanceBloc>().add(AddFinanceData(userId, result));
+              context.read<VM_Keuangan>().add(AddFinanceData(userId, result));
             }
           },
           child: const Icon(Icons.add),
@@ -156,7 +156,7 @@ class CategoryButton extends StatelessWidget {
 }
 
 class FinanceItem extends StatelessWidget {
-  final FinanceData financeData;
+  final M_PencatatanKeuangan financeData;
   const FinanceItem({
     Key? key,
     required this.financeData,
@@ -205,7 +205,9 @@ class FinanceItem extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 4), // Add some space between the text and the transaction type container
+                  const SizedBox(
+                      height:
+                          4), // Add some space between the text and the transaction type container
                   Text(financeData.tanggal),
                 ],
               ),
@@ -218,9 +220,10 @@ class FinanceItem extends StatelessWidget {
                           EditFinance(financeData: financeData),
                     ),
                   ).then((editedData) {
-                    if (editedData != null && editedData is FinanceData) {
+                    if (editedData != null &&
+                        editedData is M_PencatatanKeuangan) {
                       context
-                          .read<FinanceBloc>()
+                          .read<VM_Keuangan>()
                           .add(UpdateFinanceData(userId, editedData));
                     }
                   });

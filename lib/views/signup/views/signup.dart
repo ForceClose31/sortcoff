@@ -13,7 +13,7 @@ class SignUpPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => BasicAuthBloc(lc()),
+          create: (context) => VM_SignUp(lc()),
         ),
       ],
       child: const _Signin(),

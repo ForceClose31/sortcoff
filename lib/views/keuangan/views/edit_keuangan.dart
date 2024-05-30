@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../models/finance_data.dart';
 
 class EditFinance extends StatefulWidget {
-  final FinanceData financeData;
+  final M_PencatatanKeuangan financeData;
 
   const EditFinance({super.key, required this.financeData});
 
@@ -36,7 +36,7 @@ class _EditFinanceState extends State<EditFinance> {
       return;
     }
 
-    FinanceData editedData = FinanceData(
+    M_PencatatanKeuangan editedData = M_PencatatanKeuangan(
       id: widget.financeData.id,
       judul: _judulController.text,
       jenisTransaksi: widget.financeData.jenisTransaksi,

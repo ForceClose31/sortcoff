@@ -71,7 +71,7 @@ class _AddFinanceState extends State<AddFinance> {
       return;
     }
 
-    FinanceData newData = FinanceData(
+    M_PencatatanKeuangan newData = M_PencatatanKeuangan(
       id: user.uid,
       judul: _judulController.text,
       tanggal: _selectedDate != null

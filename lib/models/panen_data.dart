@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PanenData {
+class M_Panen {
   final String id;
   final String judul;
   final String jenisKopi;
@@ -11,7 +11,7 @@ class PanenData {
   final int yellow;
   final int green;
 
-  PanenData({
+  M_Panen({
     required this.id,
     required this.judul,
     required this.jenisKopi,
@@ -23,8 +23,8 @@ class PanenData {
     this.green = 0,
   });
 
-  factory PanenData.fromDocument(DocumentSnapshot doc) {
-    return PanenData(
+  factory M_Panen.fromDocument(DocumentSnapshot doc) {
+    return M_Panen(
       id: doc.id,
       judul: doc['judul'],
       jenisKopi: doc['jenisKopi'],

@@ -50,7 +50,7 @@ class _EmailInputFieldState extends State<EmailInputField> {
       controller: _controller,
       onChanged: (value) {
         _checkEmailValidity(value);
-        context.read<BasicAuthBloc>().add(EmailChanged(value));
+        context.read<VM_SignUp>().add(EmailChanged(value));
       },
       decoration: InputDecoration(
         contentPadding:

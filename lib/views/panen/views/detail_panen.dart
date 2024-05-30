@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sortcoff/models/panen_data.dart';
 
 class DetailPanen extends StatelessWidget {
-  final PanenData panenData;
+  final M_Panen panenData;
 
   const DetailPanen({super.key, required this.panenData});
 

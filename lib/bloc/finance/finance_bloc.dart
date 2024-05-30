@@ -3,10 +3,10 @@ import 'finance_event.dart';
 import 'finance_state.dart';
 import '../../services/finance_services.dart';
 
-class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
+class VM_Keuangan extends Bloc<FinanceEvent, FinanceState> {
   final FinanceService financeService;
 
-  FinanceBloc({required this.financeService}) : super(FinanceLoading()) {
+  VM_Keuangan({required this.financeService}) : super(FinanceLoading()) {
     on<LoadFinanceData>(_onLoadFinanceData);
     on<AddFinanceData>(_onAddFinanceData);
     on<UpdateCategory>(_onUpdateCategory);
@@ -40,7 +40,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     final currentState = state as FinanceLoaded;
     emit(currentState.copyWith(selectedCategory: event.category));
   }
-  
+
   Future<void> _onUpdateFinanceData(
       UpdateFinanceData event, Emitter<FinanceState> emit) async {
     if (state is FinanceLoaded) {

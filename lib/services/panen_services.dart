@@ -5,21 +5,21 @@ class PanenService {
   final CollectionReference _collectionReference =
       FirebaseFirestore.instance.collection('panen');
 
-  Future<List<PanenData>> fetchPanenData(String userId) async {
+  Future<List<M_Panen>> fetchPanenData(String userId) async {
     try {
       QuerySnapshot snapshot = await _collectionReference
           .doc(userId)
           .collection('userPanenData')
           .get();
       return snapshot.docs.map((doc) {
-        return PanenData.fromDocument(doc);
+        return M_Panen.fromDocument(doc);
       }).toList();
     } catch (e) {
       throw Exception('Failed to fetch data: $e');
     }
   }
 
-  Future<void> addPanenData(String userId, PanenData panenData) async {
+  Future<void> addPanenData(String userId, M_Panen panenData) async {
     try {
       await _collectionReference
           .doc(userId)
@@ -31,7 +31,7 @@ class PanenService {
   }
 
   Future<void> updatePanenData(
-      String userId, String id, PanenData panenData) async {
+      String userId, String id, M_Panen panenData) async {
     try {
       await _collectionReference
           .doc(userId)

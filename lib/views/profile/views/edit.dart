@@ -20,12 +20,12 @@ class _MyEditProfileState extends State<MyEditProfile> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late ProfileBloc _profileBloc;
+  late VM_Profile _profileBloc;
 
   @override
   void initState() {
     super.initState();
-    _profileBloc = ProfileBloc(UserService());
+    _profileBloc = VM_Profile(UserService());
     _profileBloc.add(LoadUserProfile());
   }
 
@@ -72,6 +72,7 @@ class _MyEditProfileState extends State<MyEditProfile> {
       print('Error updating password: $e');
     }
   }
+
   Future<void> verifyBeforeUpdateEmail(String newEmail, String password) async {
     try {
       await reauthenticateUser(password);
@@ -132,7 +133,7 @@ class _MyEditProfileState extends State<MyEditProfile> {
       resizeToAvoidBottomInset: false,
       body: BlocProvider(
         create: (_) => _profileBloc,
-        child: BlocBuilder<ProfileBloc, ProfileState>(
+        child: BlocBuilder<VM_Profile, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoading) {
               return const Center(child: CircularProgressIndicator());

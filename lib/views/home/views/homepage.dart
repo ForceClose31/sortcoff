@@ -23,7 +23,8 @@ class HomePage extends StatelessWidget {
     final String userId = user != null ? user.uid : '';
 
     return BlocProvider(
-      create: (context) => HomeBloc(HomeServices())..add(FetchHomeData(userId)),
+      create: (context) =>
+          VM_HomePage(HomeServices())..add(FetchHomeData(userId)),
       child: const HomePageContent(),
     );
   }
@@ -68,8 +69,10 @@ class _HomePageContentState extends State<HomePageContent> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final String userId = user != null ? user.uid : '';
-      DocumentSnapshot userSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
       if (userSnapshot.exists) {
         var userData = userSnapshot.data() as Map<String, dynamic>;
         setState(() {
@@ -199,7 +202,8 @@ class _HomePageContentState extends State<HomePageContent> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(top: 4),
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
                                               child: Text(
                                                 "$userName",
                                                 style: const TextStyle(
@@ -237,7 +241,7 @@ class _HomePageContentState extends State<HomePageContent> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      BlocBuilder<HomeBloc, HomeState>(
+                                      BlocBuilder<VM_HomePage, HomeState>(
                                         builder: (context, state) {
                                           if (state is HomeLoading) {
                                             return const Center(

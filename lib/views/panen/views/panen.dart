@@ -20,7 +20,7 @@ class PanenKopi extends StatelessWidget {
 
     return BlocProvider(
       create: (context) =>
-          PanenBloc(panenService: PanenService())..add(LoadPanenData(userId)),
+          VM_Panen(panenService: PanenService())..add(LoadPanenData(userId)),
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,7 @@ class PanenKopi extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: BlocBuilder<PanenBloc, PanenState>(
+              child: BlocBuilder<VM_Panen, PanenState>(
                 builder: (context, state) {
                   if (state is PanenLoading) {
                     return const Center(child: CircularProgressIndicator());
@@ -99,20 +99,23 @@ class PanenKopi extends StatelessWidget {
                                 ],
                               ),
                               trailing: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditPanen(panenData: state.panenList[index]),
-                                  ),
-                                ).then((editedData) {
-                                  if (editedData != null && editedData is PanenData) {
-                                    context.read<PanenBloc>().add(UpdatePanenData(userId, editedData));
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.edit),
-                            ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditPanen(
+                                          panenData: state.panenList[index]),
+                                    ),
+                                  ).then((editedData) {
+                                    if (editedData != null &&
+                                        editedData is M_Panen) {
+                                      context.read<VM_Panen>().add(
+                                          UpdatePanenData(userId, editedData));
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Icons.edit),
+                              ),
                             ),
                           ),
                         );
@@ -134,9 +137,9 @@ class PanenKopi extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const AddPanen()),
             );
-            if (result != null && result is PanenData) {
+            if (result != null && result is M_Panen) {
               // ignore: use_build_context_synchronously
-              context.read<PanenBloc>().add(AddPanenData(userId, result));
+              context.read<VM_Panen>().add(AddPanenData(userId, result));
             }
           },
           child: const Icon(Icons.add),

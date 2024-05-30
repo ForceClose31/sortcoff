@@ -38,7 +38,7 @@ class _PwdInputFieldState extends State<PwdInputField> {
         TextFormField(
           controller: _controller,
           onChanged: (value) =>
-              context.read<SigninAuthBloc>().add(PasswordChanged(value)),
+              context.read<VM_Login>().add(PasswordChanged(value)),
           obscureText: _obscureText,
           decoration: InputDecoration(
             contentPadding:

@@ -11,7 +11,7 @@ abstract class PanenState extends Equatable {
 class PanenLoading extends PanenState {}
 
 class PanenLoaded extends PanenState {
-  final List<PanenData> panenList;
+  final List<M_Panen> panenList;
 
   const PanenLoaded(this.panenList);
 

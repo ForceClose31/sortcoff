@@ -14,7 +14,7 @@ class SigninPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              SigninAuthBloc(lc(), context), // Tambahkan BuildContext di sini
+              VM_Login(lc(), context), // Tambahkan BuildContext di sini
         ),
       ],
       child: const _Signin(),

@@ -247,10 +247,9 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
                         PrimaryBtn(
                           text: 'Sign Up',
                           ontap: () {
-                            final email =
-                                context.read<BasicAuthBloc>().state.email;
+                            final email = context.read<VM_SignUp>().state.email;
                             final password =
-                                context.read<BasicAuthBloc>().state.password;
+                                context.read<VM_SignUp>().state.password;
                             if (email.isEmpty ||
                                 password.isEmpty ||
                                 !_isEmailValid ||
@@ -262,8 +261,7 @@ class _SignUpPageBodyState extends State<SignUpPageBody> {
                                 ),
                               );
                             } else {
-                              context.read<BasicAuthBloc>().add(FormSubmit());
-                              // Navigasi ke halaman login setelah sign up selesai
+                              context.read<VM_SignUp>().add(FormSubmit());
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

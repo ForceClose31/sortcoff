@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sortcoff/models/finance_data.dart';
 
 class DetailFinance extends StatelessWidget {
-  final FinanceData financeData;
+  final M_PencatatanKeuangan financeData;
 
   const DetailFinance({super.key, required this.financeData});
 

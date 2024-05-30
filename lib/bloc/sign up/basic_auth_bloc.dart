@@ -5,8 +5,8 @@ import 'package:sortcoff/repos/auth_repo/auth_repo.dart';
 part 'basic_auth_event.dart';
 part 'basic_auth_state.dart';
 
-class BasicAuthBloc extends Bloc<BasicAuthEvent, BasicAuthState> {
-  BasicAuthBloc(this._authRepo) : super(const BasicAuthState()) {
+class VM_SignUp extends Bloc<BasicAuthEvent, BasicAuthState> {
+  VM_SignUp(this._authRepo) : super(const BasicAuthState()) {
     on<EmailChanged>(_emailChanged);
     on<PasswordChanged>(_pwdChanged);
     on<NameChanged>(_nameChanged);

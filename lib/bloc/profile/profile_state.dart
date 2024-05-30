@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import '../../models/user_data.dart';
 
@@ -14,7 +13,7 @@ class ProfileInitial extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final UserProfile userProfile;
+  final M_DataAkun userProfile;
   final String email;
 
   const ProfileLoaded(this.userProfile, this.email);

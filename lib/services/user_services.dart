@@ -11,14 +11,14 @@ class UserService {
     return _auth.currentUser;
   }
 
-  Future<UserProfile?> getUserProfile() async {
+  Future<M_DataAkun?> getUserProfile() async {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
         DocumentSnapshot doc =
             await _firestore.collection('users').doc(user.uid).get();
         if (doc.exists) {
-          return UserProfile.fromFirestore(doc);
+          return M_DataAkun.fromFirestore(doc);
         }
       }
     } catch (e) {
@@ -27,7 +27,7 @@ class UserService {
     return null;
   }
 
-  Future<void> updateUserProfile(UserProfile userProfile) async {
+  Future<void> updateUserProfile(M_DataAkun userProfile) async {
     try {
       await _firestore
           .collection('users')

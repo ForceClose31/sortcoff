@@ -19,7 +19,7 @@ class LoadFinanceData extends FinanceEvent {
 
 class AddFinanceData extends FinanceEvent {
   final String userId;
-  final FinanceData financeData;
+  final M_PencatatanKeuangan financeData;
 
   const AddFinanceData(this.userId, this.financeData);
 
@@ -38,8 +38,7 @@ class UpdateCategory extends FinanceEvent {
 
 class UpdateFinanceData extends FinanceEvent {
   final String userId;
-  final FinanceData updatedFinanceData;
+  final M_PencatatanKeuangan updatedFinanceData;
 
   const UpdateFinanceData(this.userId, this.updatedFinanceData);
 }
-

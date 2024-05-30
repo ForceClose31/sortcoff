@@ -50,7 +50,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
       controller: _controller,
       onChanged: (value) {
         _checkPhoneValidity(value);
-        context.read<BasicAuthBloc>().add(PhoneChanged(value));
+        context.read<VM_SignUp>().add(PhoneChanged(value));
       },
       decoration: InputDecoration(
         contentPadding:

@@ -1,14 +1,13 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/user_data.dart';
 import '../../services/user_services.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+class VM_Profile extends Bloc<ProfileEvent, ProfileState> {
   final UserService _userService;
 
-  ProfileBloc(this._userService) : super(ProfileInitial()) {
+  VM_Profile(this._userService) : super(ProfileInitial()) {
     on<LoadUserProfile>(_onLoadUserProfile);
     on<UpdateUserProfile>(_onUpdateUserProfile);
     on<LogOutUser>(_onLogOutUser);
@@ -40,7 +39,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       final user = await _userService.getCurrentUser();
       if (user != null) {
-        final updatedProfile = UserProfile(
+        final updatedProfile = M_DataAkun(
           uid: user.uid,
           name: event.name,
           phoneNumber: event.phoneNumber,

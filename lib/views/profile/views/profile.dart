@@ -17,12 +17,12 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  late ProfileBloc _profileBloc;
+  late VM_Profile _profileBloc;
 
   @override
   void initState() {
     super.initState();
-    _profileBloc = ProfileBloc(UserService())..add(LoadUserProfile());
+    _profileBloc = VM_Profile(UserService())..add(LoadUserProfile());
   }
 
   @override
@@ -39,7 +39,7 @@ class _MyProfileState extends State<MyProfile> {
       resizeToAvoidBottomInset: false,
       body: BlocProvider(
         create: (_) => _profileBloc,
-        child: BlocBuilder<ProfileBloc, ProfileState>(
+        child: BlocBuilder<VM_Profile, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoading) {
               return const Center(child: CircularProgressIndicator());

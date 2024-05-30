@@ -5,9 +5,8 @@ import 'package:sortcoff/global/typography/typography.dart';
 import 'package:sortcoff/bloc/sign%20up/basic_auth_bloc.dart';
 
 class PwdInputField extends StatefulWidget {
-  final bool isPasswordValid; 
-  final void Function(bool)
-      onPasswordValidationChanged;
+  final bool isPasswordValid;
+  final void Function(bool) onPasswordValidationChanged;
 
   const PwdInputField({
     Key? key,
@@ -60,7 +59,7 @@ class _PwdInputFieldState extends State<PwdInputField> {
           controller: _controller,
           onChanged: (value) {
             _checkPasswordStrength(value);
-            context.read<BasicAuthBloc>().add(PasswordChanged(value));
+            context.read<VM_SignUp>().add(PasswordChanged(value));
           },
           obscureText: _obscureText,
           decoration: InputDecoration(

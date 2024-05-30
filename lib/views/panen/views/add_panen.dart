@@ -54,7 +54,7 @@ class _AddPanenState extends State<AddPanen> {
       );
       return;
     }
-    PanenData newData = PanenData(
+    M_Panen newData = M_Panen(
       id: user.uid,
       judul: _judulController.text,
       jenisKopi: _jenisKopiController.text,

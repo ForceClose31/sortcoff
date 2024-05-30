@@ -12,8 +12,7 @@ class EmailInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: (value) =>
-          context.read<SigninAuthBloc>().add(EmailChanged(value)),
+      onChanged: (value) => context.read<VM_Login>().add(EmailChanged(value)),
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
