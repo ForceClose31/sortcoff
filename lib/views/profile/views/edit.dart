@@ -5,8 +5,7 @@ import '../../../services/user_services.dart';
 import '../../../bloc/profile/profile_bloc.dart';
 import '../../../bloc/profile/profile_event.dart';
 import '../../../bloc/profile/profile_state.dart';
-import '../../signin/views/signin.dart';
-import 'profile.dart'; // Sesuaikan dengan import yang sesuai dengan halaman profil Anda
+import 'profile.dart';
 
 class MyEditProfile extends StatefulWidget {
   const MyEditProfile({Key? key}) : super(key: key);
