@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sortcoff/models/finance_data.dart';
+import 'package:sortcoff/views/home/views/homepage.dart';
 import 'package:sortcoff/views/keuangan/views/detail_keuangan.dart';
 import '../../../bloc/finance/finance_bloc.dart';
 import '../../../bloc/finance/finance_event.dart';
@@ -37,7 +39,8 @@ class FinanceRecordingView extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HomePage()));
             },
             icon: const Icon(Icons.arrow_back),
           ),
