@@ -55,7 +55,7 @@ class _HomePageContentState extends State<HomePageContent> {
 
   Future<void> getWeatherData() async {
     try {
-      Weather weather = await weatherFactory.currentWeatherByCityName("London");
+      Weather weather = await weatherFactory.currentWeatherByCityName("Jember");
       setState(() {
         weatherData = weather;
       });

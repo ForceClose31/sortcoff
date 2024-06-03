@@ -21,6 +21,7 @@ class _HasilPageState extends State<HasilPage> {
   int _redValue = 0;
   int _yellowValue = 0;
   int _greenValue = 0;
+  int _onValue = 0;
 
   @override
   void initState() {
@@ -32,9 +33,6 @@ class _HasilPageState extends State<HasilPage> {
         setState(() {
           _blueValue = newBlueValue;
         });
-        if (_blueValue == 10) {
-          _showResultPopup();
-        }
       }
     });
 
@@ -46,6 +44,18 @@ class _HasilPageState extends State<HasilPage> {
           _redValue = value;
           _updateFirestore();
         });
+      }
+    });
+
+    _dbRef.child('test').child('on').onValue.listen((event) {
+      final dynamic value = event.snapshot.value;
+      if (value is int) {
+        setState(() {
+          _onValue = value;
+        });
+        if (_onValue == 0) {
+          _showResultPopup();
+        }
       }
     });
 

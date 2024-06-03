@@ -17,7 +17,6 @@ class MyEditProfile extends StatefulWidget {
 class _MyEditProfileState extends State<MyEditProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late VM_Profile _profileBloc;
 
@@ -32,30 +31,9 @@ class _MyEditProfileState extends State<MyEditProfile> {
   void dispose() {
     _nameController.dispose();
     _phoneNumberController.dispose();
-    _emailController.dispose();
     _passwordController.dispose();
     _profileBloc.close();
     super.dispose();
-  }
-
-  // Function to change the password in Firebase Auth
-
-  Future<void> reauthenticateUser(String password) async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        AuthCredential credential = EmailAuthProvider.credential(
-          email: user.email!,
-          password: password,
-        );
-        await user.reauthenticateWithCredential(credential);
-        print('User re-authenticated successfully!');
-      } else {
-        print('User not signed in.');
-      }
-    } catch (e) {
-      print('Error re-authenticating user: $e');
-    }
   }
 
   void changePassword(String newPassword) async {
@@ -70,46 +48,6 @@ class _MyEditProfileState extends State<MyEditProfile> {
     } catch (e) {
       print('Error updating password: $e');
     }
-  }
-
-  Future<void> verifyBeforeUpdateEmail(String newEmail, String password) async {
-    try {
-      await reauthenticateUser(password);
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await user.verifyBeforeUpdateEmail(newEmail);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  'Verification email sent to $newEmail. Please verify to complete the update.'),
-            ),
-          );
-        }
-        print(
-            'Verification email sent to $newEmail. Please verify to complete the update.');
-      } else {
-        print('User not signed in.');
-      }
-    } catch (e) {
-      print('Error sending verification email: $e');
-      if (e is FirebaseAuthException && e.code == 'requires-recent-login') {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Please log in again to perform this action.'),
-            ),
-          );
-        }
-        print('Please log in again to perform this action.');
-      }
-    }
-  }
-
-  // Function to validate email format
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    return emailRegex.hasMatch(email);
   }
 
   // Function to validate name format (only letters)
@@ -288,46 +226,7 @@ class _MyEditProfileState extends State<MyEditProfile> {
                                     ),
                                   ),
                                 ),
-                                const Text(
-                                  'Email',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
                                 const SizedBox(height: 5),
-                                SizedBox(
-                                  height: 60,
-                                  width: size.width,
-                                  child: TextField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    onChanged: (value) {
-                                      setState(() {});
-                                    },
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.only(left: 20),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.black, width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      filled: true,
-                                      hintStyle: const TextStyle(
-                                        color: Color(0xff5E4437),
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      hintText: state.email,
-                                      fillColor: Colors.white70,
-                                    ),
-                                  ),
-                                ),
                                 const Text(
                                   'Password',
                                   style: TextStyle(
@@ -377,8 +276,6 @@ class _MyEditProfileState extends State<MyEditProfile> {
                                         _nameController.text.trim();
                                     final String phoneNumber =
                                         _phoneNumberController.text.trim();
-                                    final String email =
-                                        _emailController.text.trim();
                                     final String password =
                                         _passwordController.text.trim();
                                     final String currentName =
@@ -389,12 +286,10 @@ class _MyEditProfileState extends State<MyEditProfile> {
                                     // Validate input fields
                                     if (name.isEmpty ||
                                         phoneNumber.isEmpty ||
-                                        email.isEmpty ||
                                         (password.isNotEmpty &&
                                             password.length < 6) ||
                                         !isValidName(name) ||
-                                        !isValidPhoneNumber(phoneNumber) ||
-                                        !isValidEmail(email)) {
+                                        !isValidPhoneNumber(phoneNumber)) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -422,15 +317,12 @@ class _MyEditProfileState extends State<MyEditProfile> {
                                       changePassword(password);
                                     }
 
-                                    if (email.isNotEmpty) {
-                                      verifyBeforeUpdateEmail(email, password);
-                                    }
-
                                     // Navigate back to profile page after saving
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => MyProfile()),
+                                          builder: (context) =>
+                                              const MyProfile()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(

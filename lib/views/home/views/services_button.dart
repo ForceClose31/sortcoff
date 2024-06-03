@@ -30,7 +30,7 @@ class ServiceButtons extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(width: 50),
+        const SizedBox(width: 40),
         _buildServiceButton(
           icon: 'assets/images/icon/pemilahan.png',
           label: 'Pemilahan',
@@ -41,14 +41,15 @@ class ServiceButtons extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(width: 50),
+        const SizedBox(width: 40),
         _buildServiceButton(
           icon: 'assets/images/icon/keuangan.png',
           label: 'Keuangan',
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const FinanceRecordingScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const FinanceRecordingScreen()),
             );
           },
         ),
@@ -70,7 +71,8 @@ class ServiceButtons extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: const Size(63, 83), // Set the minimum size of the button
+            minimumSize:
+                const Size(63, 83), // Set the minimum size of the button
           ),
           child: Image.asset(
             icon,

@@ -66,7 +66,7 @@ class _MyWelcomeState extends State<MyWelcome> {
                             height: 30,
                           ),
                           const Text(
-                            'zzzzzzzzzzzzzzzzzzzzzzz\nxxxxxxxxxxxxxxxxxxxxxxxxxxx\nyyyyyyyyyyyyyyyyyy',
+                            'Sistem Penyortiran Otomatis\nBiji Kopi Berbasis IOT dengan\nAnalis Warna dan Ukuran',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 16),
                           ),

@@ -28,6 +28,7 @@ class _MyMachineActState extends State<MyMachineAct> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
               leading: IconButton(
